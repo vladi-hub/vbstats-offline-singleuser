@@ -23,6 +23,7 @@
     "@mui/styles": "^5.11.9",
     "@mui/system": "^5.11.0",
     "@mui/x-data-grid": "^5.17.16",
+    "@realm/react": "^0.11.0",
     "babel-preset-react-app": "^10.0.1",
     "boostrap": "^2.0.0",
     "chart.js": "^3.7.1",
@@ -36,6 +37,8 @@
     "react-scripts": "^5.0.1",
     "react-validation": "^3.0.7",
     "react-validator": "^0.1.0",
+    "realm": "^12.14.0",
+    "realm-web": "^2.0.1",
     "recharts": "^2.1.9",
     "styled-components": "^5.3.6",
     "validator": "^13.7.0"

@@ -3,13 +3,8 @@ import React, { Component } from "react";
 
 import { makeStyles } from "@mui/styles";
 import { Link, Route, BrowserRouter, Switch } from "react-router-dom";
-import AuthService from "./services/auth.service";
 
-import Login from "./components/login.component";
-import Register from "./components/register.component";
 import Home from "./components/home.component";
-import Profile from "./components/profile.component";
-import ForgetPassword from "./components/forgetpass.component";
 
 import TeamRoster from "./components/team/teamroster.component";
 import GameRoster from "./components/team/gameroster.component";
@@ -29,6 +24,7 @@ import GroupAddTwoToneIcon from '@mui/icons-material/GroupAddTwoTone';
 import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
+import Realm from "realm-web";
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -106,22 +102,7 @@ class App extends Component {
 	            <Nav.Link as={Link} to="/reports"><BarChartTwoToneIcon/>Reports</Nav.Link>
 	            </Nav>
 	            <Nav className="ml-auto">  
-	          {currentUser ? (
-	        		  <Nav.Link as={Link} to="/profile"><AccountCircleTwoToneIcon/> Profile</Nav.Link>		  
-	          ) : (		  
-
-	        		  <Nav.Link as={Link} to="/register"><GroupAddTwoToneIcon/> Sign Up</Nav.Link>
-	            
-	          )}
 	          
-	          {currentUser ? (	        		 
-	        		 
-	        		  <Nav.Link as={Link} to="/login" onClick={this.logOut}><LogoutTwoToneIcon/> LogOut</Nav.Link>		      
-	          ) : (		  
-	        		  <Nav.Link as={Link} to="/login"><InputTwoToneIcon/> Login</Nav.Link>		  
-
-	            
-	          )}
 	          </Nav>
 	          	</Navbar.Collapse>
 	          	
@@ -133,16 +114,12 @@ class App extends Component {
 	          <Switch>
 	           
 	            <Route exact path={["/", "/home"]} component={Home} />
-	            <Route exact path="/login" component={Login} />
-	            <Route exact path="/register" component={Register} />
-	            <Route exact path="/profile" component={Profile} />
 	          
 	            <Route path="/editteam" component={TeamRoster} />
 	            <Route path="/editgame" component={GameRoster} /> 
 	            <Route path="/choosegame" component={ChooseGame} />		
 	            <Route path="/allinboard" component={AllInBoard} />
 	            <Route path="/reports" component={Dashboard} />
-	            <Route path="/forgotpass" component={ForgetPassword} />
 	          </Switch>
 	        </div>
 	      </div>

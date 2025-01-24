@@ -1,23 +1,30 @@
-import http from "../http-common";
-import AuthService from "./auth.service";
 import * as Constants from "../components/constants";
+//import { Realm, RealmProvider, useRealm, useQuery } from '@realm/react'
+import * as Realm from "realm-web";
 
-class PlayerDataService {
+const app = new Realm.App({ id: APP_ID });
+// Create an anonymous credential
+const credentials = Realm.Credentials.anonymous();
+// Authenticate the user
+const user = app.logIn(credentials);
+
+class PlayerDataService  {
   
   create(data) {
-    return AuthService.getAuthorizedAxios().post(Constants.SERVER_URL +'/player', data);
+    
+    return "";
   }
 
   update(playerId, data) {
-    return AuthService.getAuthorizedAxios().put(Constants.SERVER_URL +`/player/${playerId}`, data);
+    return "";
   }
 
   delete(playerId) {
-    return AuthService.getAuthorizedAxios().delete(Constants.SERVER_URL +`/player/${playerId}`);
+    return "";
   }
 
   getAllPerUser(userId) {
-	  return AuthService.getAuthorizedAxios().get(Constants.SERVER_URL +`/player/all/${userId}`);
+	  return "";
   }
 }
 

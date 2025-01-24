@@ -6,7 +6,6 @@ import { makeStyles } from "@mui/styles";
 import Paper from "@mui/material/Paper";
 import GameDataService from "../../services/game.service";
 import StatsDataService from "../../services/stats.service";
-import AuthService from "../../services/auth.service";
 
 	import {
 		  Chart as ChartJS,
@@ -99,8 +98,6 @@ export default class Dashboard extends Component {
    
    this.handleClick = this.handleClick.bind(this);
 
-   let currentUser = AuthService.getCurrentUser();
-   let userId = currentUser.uid;
    //console.log("=======> teamId : " +teamId);
    this.state = {
       content: "",
@@ -128,7 +125,7 @@ export default class Dashboard extends Component {
       blockingAvg: 0
    };
 		   
-   GameDataService.getAllPerUser(userId).then(
+   GameDataService.getAllPerUser(1).then(
 	   response => {
 		   for (let i = 0; i < Object.keys(response.data).length; i++) {
             let gameId = response.data[i].id;
@@ -293,14 +290,6 @@ export default class Dashboard extends Component {
   
   }
 
-
-  handleClick(e) {
-    console.log("-------------Event: " + e.data);
-    
-    
-
-  }
-  
   shouldComponentUpdate() {
 	    return true;
   }

@@ -8,7 +8,6 @@ import Card from '@mui/material/Card';
 import Chip from '@mui/material/Chip';
 
 import StatsDataService from "../../services/stats.service";
-import AuthService from "../../services/auth.service";
 		
 export default class AllinBoard extends Component {
 	

@@ -1,31 +1,29 @@
-import AuthService from "./auth.service";
 import * as Constants from "../components/constants";
-import http from "../http-common";
 
 class StatsDataService {
   
   get(gameId) {
-    return AuthService.getAuthorizedAxios().get(Constants.SERVER_URL +`/stats/${gameId}`);
+    return "";
   }
 
   create(data) {
-    return AuthService.getAuthorizedAxios().post(Constants.SERVER_URL +`/stats`, data);
+    return "";
   }
 
   update(statsId, data) {
-    return AuthService.getAuthorizedAxios().put(Constants.SERVER_URL +`/stats/${statsId}`, data);
+    return "";
   }
 
   delete(statsId) {
-    return AuthService.getAuthorizedAxios().delet(Constants.SERVER_URL +`/stats/${statsId}`);
+    return "";
   }
 
   deleteAllStats(gameId) {
-    return AuthService.getAuthorizedAxios().delete(Constants.SERVER_URL +`/stats/all/${gameId}`);
+    return "";
   }
  
   updatePlayerName(playerId, data){
-	  return AuthService.getAuthorizedAxios().put(Constants.SERVER_URL +`/stats/playername/${playerId}`, data);
+	  return "";
   }
 }
 

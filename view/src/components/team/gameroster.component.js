@@ -13,8 +13,6 @@ import PlayerDataService from "../../services/player.service";
 import StatsDataService from "../../services/stats.service";
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import AuthService from "../../services/auth.service";
-import { authMiddleWare } from '../../util/auth';
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import SportsVolleyballTwoToneIcon from '@mui/icons-material/SportsVolleyballTwoTone';
@@ -40,8 +38,6 @@ export default class GameRoster extends Component {
    this.handleClick = this.handleClick.bind(this);
    this.handleClickNewGame = this.handleClickNewGame.bind(this);
    this.handleClickDelete = this.handleClickDelete.bind(this);	
-   let currentUser = AuthService.getCurrentUser();
-   let userId = currentUser.uid;
    
    this.state = {
       content: "",
@@ -52,7 +48,7 @@ export default class GameRoster extends Component {
   }
 
   reloadData(userId){
-	  GameDataService.getAllPerUser(userId).then(
+	  GameDataService.getAllPerUser(1).then(
       response => {
          setTimeout(() => {
           let rowz = new Map();
@@ -90,7 +86,6 @@ export default class GameRoster extends Component {
 	    		gameId = e.target.form[i].id;
 	    	}
 	    }
-		authMiddleWare(this.props.history);
 	    GameDataService.delete(gameId).then(
 	    			  response => {
 						  StatsDataService.deleteAllStats(gameId);						  
@@ -103,10 +98,8 @@ export default class GameRoster extends Component {
 	    			    	  this.setState({
 	    			              message: "Game deletion failed, please try again later!"
 	    			            });
-	    			      });
-	    	let currentUser = AuthService.getCurrentUser();
-	   		let userId = currentUser.uid;		      
-	    	this.reloadData(userId);		      
+	    			      });	      
+	    	this.reloadData(1);		      
 	}
 
   handleClick(e) {
@@ -121,7 +114,6 @@ export default class GameRoster extends Component {
     	    	  };
     	}
     }
-	authMiddleWare(this.props.history);
     GameDataService.update(gameId, data).then(
     			  response => {
     				  this.setState({
@@ -132,20 +124,15 @@ export default class GameRoster extends Component {
     			    	  this.setState({
     			              message: "Game update failed, please try again later!"
     			            });
-    			      });
-    	let currentUser = AuthService.getCurrentUser();
-   		let userId = currentUser.uid;		      
-    	this.reloadData(userId);		      
+    			      });		      
+    	this.reloadData(1);		      
   }
   
   handleClickNewGame(e){
-	  let userId = AuthService.getCurrentUser().uid;
 	  
 	  const data = {
-		userId: userId,
 	    title: e.target[0].value
 	  };
-	  authMiddleWare(this.props.history);
 	  GameDataService.create(data).then(
 			  response => {
 			        //console.log("===================== Create Game - ID :" + response.data.id);
@@ -154,7 +141,7 @@ export default class GameRoster extends Component {
 			            });
 			        let gameId = response.data.id;
 			        console.log("=========gameId:" + gameId);
-			        PlayerDataService.getAllPerUser(userId).then(
+			        PlayerDataService.getAllPerUser(1).then(
 						      response2 => {
 						          for (let i = 0; i < Object.keys(response2.data).length; i++) {
 						            let playerId = response2.data[i].id;
@@ -207,7 +194,7 @@ export default class GameRoster extends Component {
 			            });
 			      });
 			  });
-	  this.reloadData(userId);
+	  this.reloadData(1);
   }
   
   renderNewGameForm = () => {

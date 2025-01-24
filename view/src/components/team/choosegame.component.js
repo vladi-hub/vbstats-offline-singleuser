@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { makeStyles } from '@mui/styles';
 import Paper from '@mui/material/Paper';
-import AuthService from "../../services/auth.service";
 import GameDataService from "../../services/game.service";
 import { DataGrid } from '@mui/x-data-grid';
 import * as Constants from "../constants";
-import { authMiddleWare } from '../../util/auth';
+
 
 const columns = [
   { field: 'id', headerName: 'ID', width: 100 },
@@ -39,24 +38,17 @@ export default class ChooseGame extends Component {
   
   constructor(props) {
     super(props);
-    authMiddleWare(this.props.history);
     this.state = {
       content: "",
       rows: [],
       teamId: ""
     };
     this.handleClick = this.handleClick.bind(this);
-    
-    let currentUser = AuthService.getCurrentUser();
-    let userId = currentUser.uid;
 
-    GameDataService.getAllPerUser(userId).then(
+    GameDataService.getAllPerUser(1).then(
       response => {
          setTimeout(() => {
           let rowz = new Array();
-          //console.log("===================="+JSON.stringify(response.data));
-          //console.log("===================="+JSON.stringify(response.data.name));
-          //console.log("===================="+JSON.stringify(response.data.location));
           for (let i = 0; i < Object.keys(response.data).length; i++) {
             let gameId = response.data[i].id;
             let name = response.data[i].title;

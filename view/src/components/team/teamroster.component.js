@@ -9,8 +9,7 @@ import GameDataService from "../../services/game.service";
 import StatsDataService from "../../services/stats.service";
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
-import AuthService from "../../services/auth.service";
-import { authMiddleWare } from '../../util/auth';
+
 import UpgradeIcon from '@mui/icons-material/Upgrade';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
@@ -35,25 +34,23 @@ const useStyles = makeStyles((theme) => ({
 export default class TeamRoster extends Component {
   constructor(props) {
    super(props);
-   authMiddleWare(this.props.history);
+
    this.renderFormGroups = this.renderFormGroups.bind(this);
    this.renderNewPlayerForm = this.renderNewPlayerForm.bind(this);
    this.handleClick = this.handleClick.bind(this);
    this.handleClickNewPlayer = this.handleClickNewPlayer.bind(this);
    this.handleClickDelete = this.handleClickDelete.bind(this);	
-   let currentUser = AuthService.getCurrentUser();
-   let userId = currentUser.uid;
-   
+
    this.state = {
       content: "",
       rows: null
    };
 
-   this.reloadData(userId);
+   this.reloadData();
   }
 
-  reloadData(userId){
-	 PlayerDataService.getAllPerUser(userId).then(
+  reloadData(){
+	 PlayerDataService.getAllPerUser(1).then(
       response => {
          setTimeout(() => {
           let rowz = new Map();
@@ -102,9 +99,8 @@ export default class TeamRoster extends Component {
     			    	  this.setState({
     			              message: "Player deletion was not successful, please try again later!"
     			            });
-    			      });
-    	let userId = AuthService.getCurrentUser().uid;		      
-		this.reloadData(userId);    
+    			      });	      
+		this.reloadData(1);    
   }
   
   handleClick(e) {
@@ -121,7 +117,6 @@ export default class TeamRoster extends Component {
     	    	  };
     	}
     }
-    authMiddleWare(this.props.history);
     PlayerDataService.update(playerId, data).then(
     			  response => {
     				  let pName = {
@@ -138,27 +133,23 @@ export default class TeamRoster extends Component {
     			    	  this.setState({
     			              message: "Player updated was not successful, please try again later!"
     			            });
-    			      });
-    	 let userId = AuthService.getCurrentUser().uid;		      
-		this.reloadData(userId);    
+    			      });	      
+		this.reloadData(1);    
   }
   
   handleClickNewPlayer(e){
-	  let userId = AuthService.getCurrentUser().uid;
 	  //console.log("-----"+userId); 
 	  const data = {
-		userId: userId,
 	    name: e.target[0].value,
 	    number: e.target[2].value,
 	    position: e.target[4].value
 	  };
-	  authMiddleWare(this.props.history);
 	  PlayerDataService.create(data).then(
 			  response => {
 				    
 				    let playerId = response.data.id;
 				    
-				    GameDataService.getAllPerUser(userId).then(
+				    GameDataService.getAllPerUser(1).then(
 						      response => {
 						          for (let i = 0; i < Object.keys(response.data).length; i++) {
 						            let gameId = response.data[i].id;
@@ -215,7 +206,7 @@ export default class TeamRoster extends Component {
 				    });
 
 			      }); 	       
-     this.reloadData(userId);
+     this.reloadData(1);
 			               
   }
   
