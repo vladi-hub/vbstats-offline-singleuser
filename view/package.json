@@ -1,0 +1,61 @@
+{
+  "name": "VolleyStats-Web",
+  "version": "1.0.0",
+  "homepage": "./",
+  "description": "VolleyStats",
+  "main": "index.js",
+  "proxy": "https://us-central1-todoapp-82701.cloudfunctions.net/api",
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "author": "Vladislav Vladimirov",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.20.6",
+    "@emotion/react": "11.10.5",
+    "@emotion/styled": "11.10.5",
+    "@mui/icons-material": "5.11.0",
+    "@mui/material": "5.11.7",
+    "@mui/styled-engine-sc": "^5.11.0",
+    "@mui/styles": "^5.11.9",
+    "@mui/system": "^5.11.0",
+    "@mui/x-data-grid": "^5.17.16",
+    "babel-preset-react-app": "^10.0.1",
+    "boostrap": "^2.0.0",
+    "chart.js": "^3.7.1",
+    "cookie-parser": "^1.4.6",
+    "helmet": "^6.0.1",
+    "jquery": "^3.6.0",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-bootstrap": "^1.5.2",
+    "react-chartjs-2": "^4.3.1",
+    "react-dom": "^18.2.0",
+    "react-scripts": "^5.0.1",
+    "react-validation": "^3.0.7",
+    "react-validator": "^0.1.0",
+    "recharts": "^2.1.9",
+    "styled-components": "^5.3.6",
+    "validator": "^13.7.0"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "devDependencies": {
+    "@types/react-beautiful-dnd": "^13.0.0",
+    "axios": "^0.21.4",
+    "bootstrap": "^4.6.0",
+    "css-loader": "^5.0.1",
+    "node-service-worker": "^2.1.2",
+    "react": "^18.2.0",
+    "react-router-dom": "^5.2.0",
+    "react-split-pane-2": "^0.1.36",
+    "react-swipeable-views": "^0.13.9",
+    "style-loader": "^2.0.0"
+  }
+}
