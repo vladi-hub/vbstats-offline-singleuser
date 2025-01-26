@@ -32,47 +32,30 @@ const useStyles = makeStyles((theme) => ({
 export default class GameRoster extends Component {
   constructor(props) {
    super(props);
-   authMiddleWare(this.props.history);
+
    this.renderFormGroups = this.renderFormGroups.bind(this);
    this.renderNewGameForm = this.renderNewGameForm.bind(this);
    this.handleClick = this.handleClick.bind(this);
    this.handleClickNewGame = this.handleClickNewGame.bind(this);
    this.handleClickDelete = this.handleClickDelete.bind(this);	
-   
    this.state = {
-      content: "",
-      rows: null
-   };
-
-   this.reloadData(userId);
+	content: "",
+	rows: null
+ 	};
   }
 
-  reloadData(userId){
-	  GameDataService.getAllPerUser(1).then(
-      response => {
-         setTimeout(() => {
-          let rowz = new Map();
-          for (let i = 0; i < Object.keys(response.data).length; i++) {
-            let gameId = response.data[i].id;
-            let name = response.data[i].title;
-            rowz.set(i,{'id' : gameId, 'userId' : userId,'name' : name});
-          }
-          this.setState({
-            rows: rowz
-          });
-        },1000);
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    );
+  reloadData(){
+	var data = GameDataService.getAllPerUser(1);
+    let rowz = new Map();
+	for (let i = 0; i < Object.keys(response.data).length; i++) {
+		let gameId = response.data[i].id;
+		let name = response.data[i].title;
+		rowz.set(i,{'id' : gameId, 'name' : name});
+	}
+	this.setState({
+		rows: rowz
+	});
+   
   }
 
 
@@ -86,20 +69,13 @@ export default class GameRoster extends Component {
 	    		gameId = e.target.form[i].id;
 	    	}
 	    }
-	    GameDataService.delete(gameId).then(
-	    			  response => {
-						  StatsDataService.deleteAllStats(gameId);						  
-	    				  this.setState({
-				              message: "Game deleted successfully!"
-				            });
-	    			      })
-	    			      .catch(e => {
-							  console.log(e);
-	    			    	  this.setState({
-	    			              message: "Game deletion failed, please try again later!"
-	    			            });
-	    			      });	      
-	    	this.reloadData(1);		      
+	    if(GameDataService.delete(gameId)){
+			StatsDataService.deleteAllStats(gameId);						  
+			this.setState({
+				message: "Game deleted successfully!"
+			});
+		}	      
+	    this.reloadData();		      
 	}
 
   handleClick(e) {
@@ -114,18 +90,12 @@ export default class GameRoster extends Component {
     	    	  };
     	}
     }
-    GameDataService.update(gameId, data).then(
-    			  response => {
-    				  this.setState({
-			              message: "Game updated successfully!"
-			            });
-    			      })
-    			      .catch(e => {
-    			    	  this.setState({
-    			              message: "Game update failed, please try again later!"
-    			            });
-    			      });		      
-    	this.reloadData(1);		      
+    if(GameDataService.update(gameId, data)){
+		this.setState({
+			message: "Game updated successfully!"
+		  });
+	}		      
+    this.reloadData(1);		      
   }
   
   handleClickNewGame(e){
@@ -133,68 +103,48 @@ export default class GameRoster extends Component {
 	  const data = {
 	    title: e.target[0].value
 	  };
-	  GameDataService.create(data).then(
-			  response => {
-			        //console.log("===================== Create Game - ID :" + response.data.id);
-			        this.setState({
-			              message: "Game was created successfully!"
-			            });
-			        let gameId = response.data.id;
-			        console.log("=========gameId:" + gameId);
-			        PlayerDataService.getAllPerUser(1).then(
-						      response2 => {
-						          for (let i = 0; i < Object.keys(response2.data).length; i++) {
-						            let playerId = response2.data[i].id;
-						            let name = response2.data[i].name;
-						            let number = response2.data[i].number;
-						            let position = response2.data[i].position;
-						            console.log("=========player:" + name+":" + position +":" + playerId);
- 									const statsDat = {
-										b_error: 0,
-								        b_touch: 0,
-								        b_block: 0,
-								        b_success: 0,
-								        playerId: playerId,
-								        gameId: gameId,
-								        name: name,
-								        number: number,
-								        position: position,
-								        d_missed: 0,
-								        d_touch: 0,
-								        d_success: 0,
-								        
-								        h_error: 0,
-								        h_kill: 0,
-								        h_total: 0,
-								        
-								        p_error: 0,
-								        p_poor: 0,
-								        p_keep: 0,
-								        p_perfect: 0,
-								        
-								        s_total: 0,
-								        s_ace: 0,
-								        s_error: 0
-									 }
-									 StatsDataService.create(statsDat);
+	  let gameId = GameDataService.create(data);
+	  let data2 = PlayerDataService.getAllPlayers();
+	  for (let i = 0; i < Object.keys(data2).length; i++) {
+			let playerId = data2[i].id;
+			let name = data2[i].name;
+			let number = data2[i].number;
+			let position = data2[i].position;
+			console.log("=========player:" + name+":" + position +":" + playerId);
+			const statsDat = {
+				b_error: 0,
+				b_touch: 0,
+				b_block: 0,
+				b_success: 0,
+				playerId: playerId,
+				gameId: gameId,
+				name: name,
+				number: number,
+				position: position,
+				d_missed: 0,
+				d_touch: 0,
+				d_success: 0,
+				
+				h_error: 0,
+				h_kill: 0,
+				h_total: 0,
+				
+				p_error: 0,
+				p_poor: 0,
+				p_keep: 0,
+				p_perfect: 0,
+				
+				s_total: 0,
+				s_ace: 0,
+				s_error: 0
+				}
+				StatsDataService.create(statsDat);
 									 
-						          }
-						          this.setState({
-						              message: "Game was addedd successfully!"
-						            });
-						      },
-						      error => {
-						        this.setState({
-							              message: "You need to add players first !"
-							            });
-			      })
-			      .catch(e => {
-			    	  this.setState({
-			              message: "Fetching players list failed, please try again later!"
-			            });
-			      });
-			  });
-	  this.reloadData(1);
+	 }
+		this.setState({
+			message: "Game was addedd successfully!"
+		});
+	  this.reloadData();
   }
   
   renderNewGameForm = () => {

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 
 import { makeStyles } from "@mui/styles";
-import { Link, Route, BrowserRouter, Switch } from "react-router-dom";
+import { Link, Route, Switch } from "react-router-dom";
 
 import Home from "./components/home.component";
 
@@ -18,13 +18,9 @@ import SportsVolleyballTwoToneIcon from '@mui/icons-material/SportsVolleyballTwo
 import AddchartTwoToneIcon from '@mui/icons-material/AddchartTwoTone';
 import BarChartTwoToneIcon from '@mui/icons-material/BarChartTwoTone';
 import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
-import InputTwoToneIcon from '@mui/icons-material/InputTwoTone';
-import LogoutTwoToneIcon from '@mui/icons-material/LogoutTwoTone';
-import GroupAddTwoToneIcon from '@mui/icons-material/GroupAddTwoTone';
-import AccountCircleTwoToneIcon from '@mui/icons-material/AccountCircleTwoTone';
 
 import { Navbar, Nav, Container } from 'react-bootstrap';
-import Realm from "realm-web";
+
 
 const styles = makeStyles((theme) => ({
   root: {
@@ -45,30 +41,8 @@ class App extends Component {
 
   constructor(props) {
     super(props);
-    this.logOut = this.logOut.bind(this);
-
-    this.state = {
-      showModeratorBoard: false,
-      showAdminBoard: false,
-      currentUser: undefined,
-    };
   }
 
-  componentDidMount() {
-    const user = AuthService.getCurrentUser();
-
-    if (user) {
-      this.setState({
-        currentUser: user
-      });
-    }
-  }
-
-  logOut() {
-	  console.log(">>>>>>>>>>>>Logout callaed !!!")  
-	  localStorage.clear();
-	  window.location.href = "/login";
-  }
 
   state = {
     value: 0

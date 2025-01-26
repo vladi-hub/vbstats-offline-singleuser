@@ -1,30 +1,50 @@
 import * as Constants from "../components/constants";
-//import { Realm, RealmProvider, useRealm, useQuery } from '@realm/react'
-import * as Realm from "realm-web";
-
-const app = new Realm.App({ id: APP_ID });
-// Create an anonymous credential
-const credentials = Realm.Credentials.anonymous();
-// Authenticate the user
-const user = app.logIn(credentials);
+import React from "react";
 
 class PlayerDataService  {
-  
+
   create(data) {
-    
-    return "";
+     var team = localStorage.getItem("players");
+     var nextId = team.lastId + 1;
+     var newPlayer = { "id": nextId, "name": data['name'], "number": data.number, "position":data['postion'] }
+     team.players.push(newPlayer);
+     localStorage.setItem("player", team);
+     return nextId;
   }
 
   update(playerId, data) {
-    return "";
+    var team = localStorage.getItem("players");
+    const itemToUpdate = teams.players.find(item => item.id === playerId);
+    // Update the element
+    if (itemToUpdate) {
+      itemToUpdate.name = data['name'];
+      itemToUpdate.number = data['number'];
+      itemToUpdate.position = data['position'];
+    }
+    localStorage.setItem("player", team);
+    return JSON.stringify(itemToUpdate);
   }
 
   delete(playerId) {
-    return "";
+    var team = localStorage.getItem("players");
+    
+    team.players.forEach((value, index) => {
+      if(value.id == playerId){
+         team.players.splice(index,1);
+      }
+    });
   }
 
-  getAllPerUser(userId) {
-	  return "";
+  
+  getAllPlayers() {
+      var team = localStorage.getItem("players");
+      if(team) {
+        return JSON.stringify(team);
+      } else {
+        var data = {}
+        return JSON.stringify(data);
+      }
+    
   }
 }
 

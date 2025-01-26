@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { TableCell,TableBody,Table, TableRow, Button  } from '@mui/material';
-import { RootRef, List} from "@mui/material";
+import {  List} from "@mui/material";
 import TableContainer from '@mui/material/TableContainer';
 import Badge from '@mui/material/Badge';
 import { Droppable, DragDropContext, Draggable } from "react-beautiful-dnd";
@@ -18,7 +18,7 @@ export default class AllinBoard extends Component {
 	            data: null
 	        } 
 	    let gameId = localStorage.getItem("gameId");
-
+		localStorage.removeItem("gameId");
 	    this.handlePassingClick = this.handlePassingClick.bind(this);
 	    this.handleServingClick = this.handleServingClick.bind(this);
 	    this.handleHittingClick = this.handleHittingClick.bind(this);

@@ -18,7 +18,7 @@ import BadgeTwoToneIcon from '@mui/icons-material/BadgeTwoTone';
 import NumbersTwoToneIcon from '@mui/icons-material/NumbersTwoTone';
 import PictureInPictureTwoToneIcon from '@mui/icons-material/PictureInPictureTwoTone';
 import CircularProgress from '@mui/material/CircularProgress';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
@@ -50,33 +50,18 @@ export default class TeamRoster extends Component {
   }
 
   reloadData(){
-	 PlayerDataService.getAllPerUser(1).then(
-      response => {
-         setTimeout(() => {
-          let rowz = new Map();
-          for (let i = 0; i < Object.keys(response.data).length; i++) {
-            let playerId = response.data[i].id;
-            let name = response.data[i].name;
-            let number = response.data[i].number;
-            let position = response.data[i].position;
-            rowz.set(i,{'id' : playerId, 'userId' : userId,'name' : name, 'position' : position, 'number' : number});
-          }
-          this.setState({
-            rows: rowz
-          });
-        },1000);
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-      }
-    ); 
+	 var data = PlayerDataService.getAllPlayers();
+	let rowz = new Map();
+	for (let i = 0; i < Object.keys(data).length; i++) {
+		let playerId = data[i].id;
+		let name = data[i].name;
+		let number = data[i].number;
+		let position = data[i].position;
+		rowz.set(i,{'id' : playerId, 'name' : name, 'position' : position, 'number' : number});
+	}
+	this.setState({
+		rows: rowz
+	}); 
   }
   
   handleClickDelete(e) {
@@ -88,7 +73,6 @@ export default class TeamRoster extends Component {
     		playerId = e.target.form[i].id;
     	}
     }
-    authMiddleWare(this.props.history);
     PlayerDataService.delete(playerId).then(
     			  response => {
     				  this.setState({
@@ -117,24 +101,16 @@ export default class TeamRoster extends Component {
     	    	  };
     	}
     }
-    PlayerDataService.update(playerId, data).then(
-    			  response => {
-    				  let pName = {
-    					  name: data.name,
-    					  number: data.number
-    				  }
-    				  StatsDataService.updatePlayerName(playerId,pName);
-    				  this.setState({
-			              message: "Player updated successfully!"
-			            });
-    			      })
-    			      .catch(e => {
-    			    	  console.log(e);
-    			    	  this.setState({
-    			              message: "Player updated was not successful, please try again later!"
-    			            });
-    			      });	      
-		this.reloadData(1);    
+    let data2 = PlayerDataService.update(playerId, data);
+    let pName = {
+		name: data2.name,
+		number: data2.number
+	}
+    StatsDataService.updatePlayerName(playerId,pName);
+	this.setState({
+		message: "Player updated successfully!"
+	});	      
+	this.reloadData(1);    
   }
   
   handleClickNewPlayer(e){
@@ -144,68 +120,42 @@ export default class TeamRoster extends Component {
 	    number: e.target[2].value,
 	    position: e.target[4].value
 	  };
-	  PlayerDataService.create(data).then(
-			  response => {
+	  let data2 = PlayerDataService.create(data);
+	  let playerId = data2.id;
 				    
-				    let playerId = response.data.id;
-				    
-				    GameDataService.getAllPerUser(1).then(
-						      response => {
-						          for (let i = 0; i < Object.keys(response.data).length; i++) {
-						            let gameId = response.data[i].id;
-									const statsDat = {
-										b_error: 0,
-								        b_touch: 0,
-								        b_block: 0,
-								        b_success: 0,
-								        playerId: playerId,
-								        gameId: gameId,
-								        name: data.name,
-								        number: data.number,
-								        d_missed: 0,
-								        d_touch: 0,
-								        d_success: 0,
-								        
-								        h_error: 0,
-								        h_kill: 0,
-								        h_total: 0,
-								        
-								        p_error: 0,
-								        p_poor: 0,
-								        p_perfect: 0,
-								        
-								        s_total: 0,
-								        s_ace: 0,
-								        s_error: 0
-									 }
-									 StatsDataService.create(statsDat);	
-						          }
-						          this.setState({
-						              message: "Player was addedd successfully!"
-						            });
-						          
-						      },
-						      error => {
-						        this.setState({
-							              message: "You need to add players first !"
-							            });
-			      })
-			      .catch(e => {
-			    	 
-			    	  console.log(e);
-			    	  this.setState({
-			              message: "Fetching players list failed, please try again later!"
-			            });
-			      });
-				    
-				     
-			      })
-			      .catch(e => {
-					   this.setState({
-				     	 message: "Player not created, please try again later!"
-				    });
-
-			      }); 	       
+	  let data3 = GameDataService.getAllPerUser(1);
+	  for (let i = 0; i < Object.keys(data3).length; i++) {
+		let gameId = data3[i].id;
+		const statsDat = {
+			b_error: 0,
+			b_touch: 0,
+			b_block: 0,
+			b_success: 0,
+			playerId: playerId,
+			gameId: gameId,
+			name: data3.name,
+			number: data3.number,
+			d_missed: 0,
+			d_touch: 0,
+			d_success: 0,
+			
+			h_error: 0,
+			h_kill: 0,
+			h_total: 0,
+			
+			p_error: 0,
+			p_poor: 0,
+			p_perfect: 0,
+			
+			s_total: 0,
+			s_ace: 0,
+			s_error: 0
+			}
+			StatsDataService.create(statsDat);	
+		}
+		this.setState({
+			message: "Player was addedd successfully!"
+		}); 	       
      this.reloadData(1);
 			               
   }
