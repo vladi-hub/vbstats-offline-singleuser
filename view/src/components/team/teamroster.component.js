@@ -42,26 +42,35 @@ export default class TeamRoster extends Component {
    this.handleClickDelete = this.handleClickDelete.bind(this);	
 
    this.state = {
-      content: "",
       rows: null
    };
 
-   this.reloadData();
+
+  }
+
+  componentDidMount() {
+	this.reloadData();
   }
 
   reloadData(){
-	 var data = PlayerDataService.getAllPlayers();
-	let rowz = new Map();
-	for (let i = 0; i < Object.keys(data).length; i++) {
-		let playerId = data[i].id;
-		let name = data[i].name;
-		let number = data[i].number;
-		let position = data[i].position;
-		rowz.set(i,{'id' : playerId, 'name' : name, 'position' : position, 'number' : number});
-	}
 	this.setState({
-		rows: rowz
-	}); 
+		rows: null
+	});
+	 var data = PlayerDataService.getAllPlayers();
+	 //console.log("--------------------------:" + JSON.stringify(data) + " : size:"+data.length);
+	 if(data){
+		let rowz = new Map();
+		for (let i = 0; i < Object.keys(data).length; i++) {
+			let playerId = data[i].id;
+			let name = data[i].name;
+			let number = data[i].number;
+			let position = data[i].position;
+			rowz.set(i,{'id' : playerId, 'name' : name, 'position' : position, 'number' : number});
+		}
+		this.setState({
+			rows: rowz
+		}); 
+	}
   }
   
   handleClickDelete(e) {
@@ -73,17 +82,10 @@ export default class TeamRoster extends Component {
     		playerId = e.target.form[i].id;
     	}
     }
-    PlayerDataService.delete(playerId).then(
-    			  response => {
-    				  this.setState({
-			              message: "Player deleted successfully!"
-			            });
-    			      })
-    			      .catch(e => {
-    			    	  this.setState({
-    			              message: "Player deletion was not successful, please try again later!"
-    			            });
-    			      });	      
+    PlayerDataService.delete(playerId);
+	this.setState({
+		message: "Player deleted successfully!"
+	});	      
 		this.reloadData(1);    
   }
   
@@ -195,9 +197,9 @@ export default class TeamRoster extends Component {
 
 
   renderFormGroups = () => {
-    const data = Array.from(this.state.rows);
-    
-    if(data){
+	let data = null;
+	if(this.state.rows) {
+       data = Array.from(this.state.rows);
       // Here we build the form's groups elements dynamically
       return data.map(group => {
           return  (<div className="form-group" key={group[1].id}>
@@ -232,10 +234,10 @@ shouldComponentUpdate() {
   
 render() {
   let jsondata = this.state.rows;
-  if(jsondata){
+  
 	  return (
 			<Paper className={useStyles.root}>
-			<h2>Manage your players in the team - Players current count: {this.state.rows.size}</h2>
+			<h2>Manage your players in the team </h2>
 			<hr/>
 				<form onSubmit={this.handleClick} className={useStyles.root} noValidate autoComplete="off">
 					{this.renderFormGroups()}
@@ -257,12 +259,5 @@ render() {
 			{this.renderNewPlayerForm()}
 			</Paper>
 		);
-  		} else {
-  			return (<Paper className={useStyles.root}>
-			<h2>Data is loading from the cloud ...</h2>
-			<hr/>
-			<CircularProgress />
-			</Paper>);
-  		}
 	}
 }

@@ -165,20 +165,22 @@ export default class GameRoster extends Component {
 
 
   renderFormGroups = () => {
-    const data = Array.from(this.state.rows);
-    console.log(data);
-    if(data){
-      // Here we build the form's groups elements dynamically
-      return data.map(group => {
-          return  (<div className="form-group" key={group[1].id}>
-            <React.Fragment key={group[1].id}>
-                <SportsVolleyballTwoToneIcon/>
-            	<Checkbox name="id" id={group[1].id.toString()} inputProps={{ 'aria-label': 'description' }}/>
-                <TextField defaultValue={group[1].name} inputProps={{ 'aria-label': 'description' }} id="gameName" label="Game Name" variant="outlined"/> 
-            </React.Fragment>
-                </div>
-          )
-      });
+	let data = null;
+	if(this.state.rows) {
+		data = Array.from(this.state.rows);
+		if(data){
+		// Here we build the form's groups elements dynamically
+		return data.map(group => {
+			return  (<div className="form-group" key={group[1].id}>
+				<React.Fragment key={group[1].id}>
+					<SportsVolleyballTwoToneIcon/>
+					<Checkbox name="id" id={group[1].id.toString()} inputProps={{ 'aria-label': 'description' }}/>
+					<TextField defaultValue={group[1].name} inputProps={{ 'aria-label': 'description' }} id="gameName" label="Game Name" variant="outlined"/> 
+				</React.Fragment>
+					</div>
+			)
+		});
+	}
     }   
 }
 
@@ -188,10 +190,9 @@ shouldComponentUpdate() {
   
 render() {
   let jsondata = this.state.rows;
-  if(jsondata){
 	  return (
 			<Paper className={useStyles.root}>
-			<h2>Manage the games you would like to add stats for - current count: {this.state.rows.size}</h2>
+			<h2>Manage the games you would like to add stats for </h2>
 			<hr/>
 				<form onSubmit={this.handleClick} className={useStyles.root} noValidate autoComplete="off">
 					{this.renderFormGroups()}
@@ -215,12 +216,5 @@ render() {
 			{this.renderNewGameForm()}
 			</Paper>
 		);
-  		} else {
-  			return (<Paper className={useStyles.root}>
-			<h2>Data is loading from the cloud ...</h2>
-			<hr/>
-			<CircularProgress />
-			</Paper>);
-  		}
 	}
 }

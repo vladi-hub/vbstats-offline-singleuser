@@ -38,11 +38,12 @@ class PlayerDataService  {
   
   getAllPlayers() {
       var team = localStorage.getItem("players");
+      console.log(" ======== " + team);
       if(team) {
         return JSON.stringify(team);
       } else {
-        var data = {}
-        return JSON.stringify(data);
+        var data = {};
+        return null;
       }
     
   }
