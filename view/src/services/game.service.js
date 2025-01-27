@@ -4,10 +4,10 @@ class GameDataService {
   
   getAllPerUser(userId) {
     var team = localStorage.getItem("games");
-    if (team == null){
-      return {0:"Test"};
+    if (!team){
+      return null;
     }
-    return JSON.stringify(team);
+    return team;
     /*var data = {
       "lastId": "3",
       "games": [
@@ -30,30 +30,39 @@ class GameDataService {
 
   create(data) {
     var games = localStorage.getItem("games");
-     var nextId = games.lastId + 1;
-     var newGame = { "id": nextId, "name": data['name']  }
-     games.games.push(newGame);
-     localStorage.setItem("games", games);
-     return nextId;
+    if(!games){
+      games = {
+       lastId: 0,
+       games: [] // Add the empty array field
+     };
+    } else {
+      games = JSON.parse(games);
+    }
+    var nextId = games.lastId + 1;
+    var newGame = { "id": nextId, "name": data['name']  }
+    games.games.push(newGame);
+    games.lastId = nextId;
+    localStorage.setItem("games", JSON.stringify(games));
+    return nextId;
   }
 
   update(gameId, data) {
-    var games = localStorage.getItem("games");
-    const itemToUpdate = games.games.find(item => item.id === gameId);
+    var games = JSON.parse(localStorage.getItem("games"));
+    const itemToUpdate = games.games.find(item => item.id === parseInt(gameId));
     // Update the element
     if (itemToUpdate) {
       itemToUpdate.name = data['name'];
+      localStorage.setItem("games", JSON.stringify(games));
     }
-    localStorage.setItem("games", games);
-    return JSON.stringify(itemToUpdate);
   }
 
   delete(gameId) {
-    var games = localStorage.getItem("games");
+    var games = JSON.parse(localStorage.getItem("games"));
     
     games.games.forEach((value, index) => {
-      if(value.id == gameId){
+      if(value.id == parseInt(gameId)){
         games.games.splice(index,1);
+        localStorage.setItem("games", JSON.stringify(games));
       }
     });
   }

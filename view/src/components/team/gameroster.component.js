@@ -42,26 +42,41 @@ export default class GameRoster extends Component {
 	content: "",
 	rows: null
  	};
+
+	//localStorage.removeItem("games");
   }
 
   reloadData(){
+	setTimeout(() => {
+		this.setState({
+			rows: null
+		});
+	  },1000);
 	var data = GameDataService.getAllPerUser(1);
-    let rowz = new Map();
-	for (let i = 0; i < Object.keys(response.data).length; i++) {
-		let gameId = response.data[i].id;
-		let name = response.data[i].title;
-		rowz.set(i,{'id' : gameId, 'name' : name});
+	if(data){
+		let rowz = new Map();
+		data = JSON.parse(data);
+		for (let i = 0; i < Object.keys(data.games).length; i++) {
+			let gameId = data.games[i].id;
+			let name = data.games[i].name;
+			rowz.set(i,{'id' : gameId, 'name' : name});
+		}
+		setTimeout(() => {
+			this.setState({
+				rows: rowz
+			});
+		},1000); 
 	}
-	this.setState({
-		rows: rowz
-	});
    
   }
 
 
+  componentDidMount() {
+	this.reloadData();
+  }
 
 	handleClickDelete(e){
-		event.preventDefault();
+		//event.preventDefault();
 		let gameId = 0;
 	    let i = 0;
 	    for(i =0; i < e.target.form.length; i++){
@@ -69,12 +84,12 @@ export default class GameRoster extends Component {
 	    		gameId = e.target.form[i].id;
 	    	}
 	    }
-	    if(GameDataService.delete(gameId)){
-			StatsDataService.deleteAllStats(gameId);						  
-			this.setState({
-				message: "Game deleted successfully!"
-			});
-		}	      
+	    GameDataService.delete(gameId);
+		StatsDataService.deleteAllStats(gameId);						  
+		this.setState({
+			message: "Game deleted successfully!"
+		});
+			      
 	    this.reloadData();		      
 	}
 
@@ -86,30 +101,31 @@ export default class GameRoster extends Component {
     	if(e.target[i].checked) {
     		gameId = e.target[i].id;
     		data = {
-    	    	    title: e.target[i+1].value
+    	    	    name: e.target[i+1].value
     	    	  };
     	}
     }
-    if(GameDataService.update(gameId, data)){
-		this.setState({
-			message: "Game updated successfully!"
-		  });
-	}		      
+    GameDataService.update(gameId, data);
+	this.setState({
+		message: "Game updated successfully!"
+		});
+			      
     this.reloadData(1);		      
   }
   
   handleClickNewGame(e){
 	  
 	  const data = {
-	    title: e.target[0].value
+	    name: e.target[0].value
 	  };
 	  let gameId = GameDataService.create(data);
 	  let data2 = PlayerDataService.getAllPlayers();
-	  for (let i = 0; i < Object.keys(data2).length; i++) {
-			let playerId = data2[i].id;
-			let name = data2[i].name;
-			let number = data2[i].number;
-			let position = data2[i].position;
+	  data2 = JSON.parse(data2);
+	  for (let i = 0; i < Object.keys(data2.players).length; i++) {
+			let playerId = data2.players[i].id;
+			let name = data2.players[i].name;
+			let number = data2.players[i].number;
+			let position = data2.players[i].position;
 			console.log("=========player:" + name+":" + position +":" + playerId);
 			const statsDat = {
 				b_error: 0,
@@ -168,7 +184,6 @@ export default class GameRoster extends Component {
 	let data = null;
 	if(this.state.rows) {
 		data = Array.from(this.state.rows);
-		if(data){
 		// Here we build the form's groups elements dynamically
 		return data.map(group => {
 			return  (<div className="form-group" key={group[1].id}>
@@ -180,7 +195,7 @@ export default class GameRoster extends Component {
 					</div>
 			)
 		});
-	}
+	
     }   
 }
 
@@ -189,7 +204,6 @@ shouldComponentUpdate() {
 }
   
 render() {
-  let jsondata = this.state.rows;
 	  return (
 			<Paper className={useStyles.root}>
 			<h2>Manage the games you would like to add stats for </h2>

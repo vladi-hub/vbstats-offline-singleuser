@@ -34,6 +34,8 @@ export default class Home extends Component {
     this.state = {
       content: ""
     };
+
+	//localStorage.clear();
   }
   
   

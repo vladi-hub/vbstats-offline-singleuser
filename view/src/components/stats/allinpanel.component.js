@@ -18,7 +18,7 @@ export default class AllinBoard extends Component {
 	            data: null
 	        } 
 	    let gameId = localStorage.getItem("gameId");
-		localStorage.removeItem("gameId");
+		//localStorage.removeItem("gameId");
 	    this.handlePassingClick = this.handlePassingClick.bind(this);
 	    this.handleServingClick = this.handleServingClick.bind(this);
 	    this.handleHittingClick = this.handleHittingClick.bind(this);
@@ -28,27 +28,78 @@ export default class AllinBoard extends Component {
 	    this.handleStoreClick = this.handleStoreClick.bind(this);
 	    this.onDragEnd = this.onDragEnd.bind(this)
 	    
-	    StatsDataService.get(gameId)
-	      .then(response => {
-	          setTimeout(() => {
-	        	  const jsdata = response.data;
-	              this.setState({
-	                data: jsdata
-	              });
-	            },1000);
-	          },
-	          error => {
-	            this.setState({
-	              content:
-	                (error.response &&
-	                  error.response.data &&
-	                  error.response.data.message) ||
-	                error.message ||
-	                error.toString()
-	            });
-	          }
-	        );
-	      }
+	    let stats = StatsDataService.get(gameId);
+		let rowz = new Array();
+		//stats = JSON.parse(stats);
+		for (let i = 0; i < Object.keys(stats).length; i++) {
+			let playerId = stats[i].id;
+			let name = stats[i].name;
+			let number = stats[i].number;
+			let position = stats[i].position;
+
+			let b_error = stats[i].b_error;
+            let b_touch = stats[i].b_touch;
+            let b_block = stats[i].b_block;
+            let b_success = stats[i].b_success;
+
+            let d_missed = stats[i].d_missed;
+            let d_touch = stats[i].d_touch;
+            let d_success = stats[i].d_success;
+
+            let h_error = stats[i].h_error;
+            let h_kill = stats[i].h_kill;
+            let h_total = stats[i].h_total;
+
+            let p_error = stats[i].p_error;
+            let p_poor = stats[i].p_poor;
+            let p_keep = stats[i].p_keep;
+            let p_perfect =stats[i].p_perfect;
+
+            let s_total = stats[i].s_total;
+            let s_ace = stats[i].s_ace;
+            let s_error =stats[i].s_error;
+			rowz[i] = {'id' : playerId, 'name' : name, 'position' : position, 'number' : number,
+				"b_error": b_error,
+				"b_touch": b_touch,
+				"b_block": b_block,
+				"b_success": b_success,
+				"d_missed": d_missed,
+				"d_touch": d_touch,
+				"d_success": d_success,
+				
+				"h_error": h_error,
+				"h_kill": h_kill,
+				"h_total": h_total,
+				
+				"p_error": p_error,
+				"p_poor": p_poor,
+				"p_keep": p_keep,
+				"p_perfect": p_perfect,
+				
+				"s_total": s_total,
+				"s_ace": s_ace,
+				"s_error": s_error
+			};
+		}
+	    setTimeout(() => {
+			const jsdata = rowz;
+			this.setState({
+			  data: jsdata
+			});
+		  },1000);
+	}
+
+	reloadData(){
+		setTimeout(() => {
+			this.setState({
+				rows: null
+			});
+		  },1000);
+		  
+
+	componentDidMount() {
+		this.reloadData();
+	}
 	
  getStyle({ provided, style, isDragging }) {
 		  // If you don't want any spacing between your items
@@ -559,24 +610,6 @@ export default class AllinBoard extends Component {
 				);
 	}
 	
-	saveOfflineState(){
-		let currentUser = AuthService.getCurrentUser();
-		let userId = currentUser.uid;
-		let playersData = this.state.data;
-		localStorage.setItem("playersData",JSON.stringify(playersData));
-		let lastUpdate = new Date(localStorage.getItem("update_timestamp"));
-		var present_date = new Date();
-		const ten_minutes = 1 * 60 * 1000;
-		const compareTo = new Date(present_date - ten_minutes);
-		if(!lastUpdate || compareTo.getTime() > lastUpdate.getTime()){
-			console.log("------------------ UPDATE Server Side and TimeStamp---------------");
-			localStorage.setItem("update_timestamp",present_date.toString());
-			//currentUser.revokeRefreshTokens(userId);
-			this.updateDBWithState();
-		}
-		//localStorage.setItem("timestamp")
-	}
-	
 	updateDBWithState(){
 		let jdata = JSON.parse(localStorage.getItem("playersData"));
 		let dataarr = Array.from(jdata); 
@@ -606,7 +639,6 @@ export default class AllinBoard extends Component {
 	generateRows(){
 		let jsondata = this.state.data;
 		let i = 1; 
-		let dataarr = Array.from(jsondata);
 		if(jsondata) {
 				//return  (
 				
@@ -614,7 +646,7 @@ export default class AllinBoard extends Component {
 					return (		
 						<DragDropContext onDragEnd={this.onDragEnd}>
 						<div className="app">
-						<Droppable droppableId="droppable-list">
+						<Droppable droppableId="droppable-list" key="{i}">
 				          
 					      		{provided => (
 					      				 
@@ -630,7 +662,7 @@ export default class AllinBoard extends Component {
 											      ref={provided.innerRef}
 											      {...provided.draggableProps}
 											      {...provided.dragHandleProps}
-											    >
+												  key={group.id}>
 											      { this.item2(provided,group) }
 											    </div>
 											  )}
@@ -652,10 +684,7 @@ export default class AllinBoard extends Component {
 	
 	render() { 	
 		let jsondata = this.state.data;
-		
-		if(jsondata) {
-		  let dataarr = Array.from(jsondata);
-		  this.saveOfflineState();
+		 
 		  return (	  
 			   <TableContainer style={{ width: "100%" }}>
 						<Button style={{ width: "100%" }} variant="contained" color="primary" onClick={this.handleStoreClick}>
@@ -672,18 +701,13 @@ export default class AllinBoard extends Component {
 			      </tbody>	
 			     
 			      </Table>
-			    </TableContainer>
-			    
-			  );
-		}else {
-			return <TableBody><TableRow style={{ width: "100%" }}><TableCell>Data is Loading ...</TableCell></TableRow></TableBody>
-		}
+			    </TableContainer>);
 	}
 	
   item2({ provided, item, style, isDragging }, group){
 		return (
 				
-				 <TableBody>	
+				 <TableBody key={group.id}>	
 				  <TableRow style={{ width: "100%" }}>
 		            <TableCell><strong><i> {group.name}({group.number})-{group.position}  </i></strong></TableCell>
 		            <TableCell >{this.generatePassingCard(group.p_poor, group.p_error,group.p_keep, group.p_perfect,group.id)}</TableCell>

@@ -17,7 +17,6 @@ import SportsHandballIcon from '@mui/icons-material/SportsHandball';
 import BadgeTwoToneIcon from '@mui/icons-material/BadgeTwoTone';
 import NumbersTwoToneIcon from '@mui/icons-material/NumbersTwoTone';
 import PictureInPictureTwoToneIcon from '@mui/icons-material/PictureInPictureTwoTone';
-import CircularProgress from '@mui/material/CircularProgress';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 
@@ -45,7 +44,6 @@ export default class TeamRoster extends Component {
       rows: null
    };
 
-
   }
 
   componentDidMount() {
@@ -53,28 +51,35 @@ export default class TeamRoster extends Component {
   }
 
   reloadData(){
-	this.setState({
-		rows: null
-	});
+	setTimeout(() => {
+		this.setState({
+			rows: null
+		});
+	  },1000);
+	
 	 var data = PlayerDataService.getAllPlayers();
 	 //console.log("--------------------------:" + JSON.stringify(data) + " : size:"+data.length);
 	 if(data){
 		let rowz = new Map();
-		for (let i = 0; i < Object.keys(data).length; i++) {
-			let playerId = data[i].id;
-			let name = data[i].name;
-			let number = data[i].number;
-			let position = data[i].position;
+		data = JSON.parse(data);
+		for (let i = 0; i < Object.keys(data.players).length; i++) {
+			let playerId = data.players[i].id;
+			let name = data.players[i].name;
+			let number = data.players[i].number;
+			let position = data.players[i].position;
 			rowz.set(i,{'id' : playerId, 'name' : name, 'position' : position, 'number' : number});
 		}
-		this.setState({
-			rows: rowz
-		}); 
+
+		setTimeout(() => {
+			this.setState({
+				rows: rowz
+			});
+		  },1000); 
 	}
   }
   
   handleClickDelete(e) {
-    event.preventDefault();
+    //event.preventDefault();
 	let playerId = 0;
     let i = 0;
     for(i =0; i < e.target.form.length; i++){
@@ -103,12 +108,8 @@ export default class TeamRoster extends Component {
     	    	  };
     	}
     }
-    let data2 = PlayerDataService.update(playerId, data);
-    let pName = {
-		name: data2.name,
-		number: data2.number
-	}
-    StatsDataService.updatePlayerName(playerId,pName);
+    PlayerDataService.update(playerId, data);
+    StatsDataService.updatePlayerName(playerId,data);
 	this.setState({
 		message: "Player updated successfully!"
 	});	      
@@ -124,37 +125,6 @@ export default class TeamRoster extends Component {
 	  };
 	  let data2 = PlayerDataService.create(data);
 	  let playerId = data2.id;
-				    
-	  let data3 = GameDataService.getAllPerUser(1);
-	  for (let i = 0; i < Object.keys(data3).length; i++) {
-		let gameId = data3[i].id;
-		const statsDat = {
-			b_error: 0,
-			b_touch: 0,
-			b_block: 0,
-			b_success: 0,
-			playerId: playerId,
-			gameId: gameId,
-			name: data3.name,
-			number: data3.number,
-			d_missed: 0,
-			d_touch: 0,
-			d_success: 0,
-			
-			h_error: 0,
-			h_kill: 0,
-			h_total: 0,
-			
-			p_error: 0,
-			p_poor: 0,
-			p_perfect: 0,
-			
-			s_total: 0,
-			s_ace: 0,
-			s_error: 0
-			}
-			StatsDataService.create(statsDat);	
-		}
 		this.setState({
 			message: "Player was addedd successfully!"
 		}); 	       
@@ -171,10 +141,11 @@ export default class TeamRoster extends Component {
 	               
 	                <NumbersTwoToneIcon/> <TextField required id="outlined-basic" label="Player Number" variant="outlined"/>         
 	                	
-		                <PictureInPictureTwoToneIcon/> <Select
+		                <PictureInPictureTwoToneIcon/>
+						 <Select
 		                labelId="demo-simple-select-label"
 		                    id="demo-simple-select"
-		                    value={'S'}
+		                    defaultValue={'S'}
 		                    label="Player Position" variant="outlined"
 		                  >
 		                    <MenuItem value={'S'}>S</MenuItem>
@@ -211,7 +182,7 @@ export default class TeamRoster extends Component {
                 <Select
 	                labelId="demo-simple-select-label"
 	                    id="demo-simple-select"
-	                    value={group[1].position}
+	                    defaultValue={group[1].position}
 	                    label="Player Position" variant="outlined"
 	                  >
 	                    <MenuItem value={'S'}>S</MenuItem>
@@ -233,8 +204,6 @@ shouldComponentUpdate() {
 }
   
 render() {
-  let jsondata = this.state.rows;
-  
 	  return (
 			<Paper className={useStyles.root}>
 			<h2>Manage your players in the team </h2>

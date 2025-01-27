@@ -39,48 +39,42 @@ export default class ChooseGame extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content: "",
-      rows: [],
-      teamId: ""
+      rows: []
     };
     this.handleClick = this.handleClick.bind(this);
-
-    GameDataService.getAllPerUser(1).then(
-      response => {
-         setTimeout(() => {
-          let rowz = new Array();
-          for (let i = 0; i < Object.keys(response.data).length; i++) {
-            let gameId = response.data[i].id;
-            let name = response.data[i].title;
-            rowz[i] = {'id' : gameId,'name' : name, isEditMode: false};      
-            //console.log("######### tourneyId :" + tourneyId +" | name :" +name + " | size :"+rowz.size);            
-          }
-
-          this.setState({
-            rows: rowz
-          });
-        },1000);
-      },
-      error => {
-        this.setState({
-          content:
-            (error.response &&
-              error.response.data &&
-              error.response.data.message) ||
-            error.message ||
-            error.toString()
-        });
-        this.setState({
-            message: "Fetching games failed, please try again later!"
-          });
-      }
-    );
   }
 
-  handleClick(e) {
-    //console.log("Tournament Id state : " + e.data.id);
-    
-    localStorage.setItem("gameId", e.id);
+  reloadData(){
+    setTimeout(() => {
+      this.setState({
+        rows: null
+      });
+      },1000);
+    var data = GameDataService.getAllPerUser(1);
+    if(data){
+      let rowz = new Array();
+      data = JSON.parse(data);
+      for (let i = 0; i < Object.keys(data.games).length; i++) {
+        let gameId = data.games[i].id;
+        let name = data.games[i].name;
+        rowz[i] = {'id' : gameId,'name' : name, isEditMode: false};  
+      }
+      setTimeout(() => {
+        this.setState({
+          rows: rowz
+        });
+      },1000); 
+    }
+     
+  }
+
+    componentDidMount() {
+      this.reloadData();
+    }
+
+  handleClick(e) { 
+    let gameId = e.id;
+    localStorage.setItem("gameId", gameId);
     let flow =  localStorage.getItem("flow");
     if (flow === "reports" ){
     	this.props.history.push("/reports");
