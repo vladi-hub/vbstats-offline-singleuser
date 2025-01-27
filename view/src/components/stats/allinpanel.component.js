@@ -17,7 +17,6 @@ export default class AllinBoard extends Component {
 	    this.state = {
 	            data: null
 	        } 
-	    let gameId = localStorage.getItem("gameId");
 		//localStorage.removeItem("gameId");
 	    this.handlePassingClick = this.handlePassingClick.bind(this);
 	    this.handleServingClick = this.handleServingClick.bind(this);
@@ -26,9 +25,19 @@ export default class AllinBoard extends Component {
 	    this.handleDiggingClick = this.handleDiggingClick.bind(this);
 	    
 	    this.handleStoreClick = this.handleStoreClick.bind(this);
-	    this.onDragEnd = this.onDragEnd.bind(this)
-	    
-	    let stats = StatsDataService.get(gameId);
+	    this.onDragEnd = this.onDragEnd.bind(this);
+		this.reloadData();
+		//localStorage.removeItem("1_stats");
+	}
+
+	reloadData(){
+		setTimeout(() => {
+			this.setState({
+				data: null
+			});
+		  },1000);
+		  let gameId = localStorage.getItem("gameId");
+		let stats = StatsDataService.get(gameId);
 		let rowz = new Array();
 		//stats = JSON.parse(stats);
 		for (let i = 0; i < Object.keys(stats).length; i++) {
@@ -88,13 +97,6 @@ export default class AllinBoard extends Component {
 			});
 		  },1000);
 	}
-
-	reloadData(){
-		setTimeout(() => {
-			this.setState({
-				rows: null
-			});
-		  },1000);
 		  
 
 	componentDidMount() {
@@ -639,51 +641,48 @@ export default class AllinBoard extends Component {
 	generateRows(){
 		let jsondata = this.state.data;
 		let i = 1; 
-		if(jsondata) {
-				//return  (
-				
-				//{Object.values(this.state.data).map((column) => {  		
-					return (		
-						<DragDropContext onDragEnd={this.onDragEnd}>
-						<div className="app">
-						<Droppable droppableId="droppable-list" key="{i}">
-				          
-					      		{provided => (
-					      				 
-			      				//<RootRef rootRef={provided.innerRef}>
-			      				<div ref={provided.innerRef}>
-			  		            <List>
-					      				
-					      			{jsondata.map((group, index) => {
-					      			  return(
-										<Draggable draggableId={group.id} key={group.id} index={index}>	
-										{(provided, snapshot) => (
-											    <div
-											      ref={provided.innerRef}
-											      {...provided.draggableProps}
-											      {...provided.dragHandleProps}
-												  key={group.id}>
-											      { this.item2(provided,group) }
-											    </div>
-											  )}
-										</Draggable> 
-										);
-									   } 
-					      			  )  
-					      			} {provided.placeholder}
-					      			 </List>
-					      			 </div>
-					      			 //</RootRef>
-									)}
-					      		</Droppable>
-					      		</div>
-					      </DragDropContext>
-							   );			
-		}
+		if(jsondata){ 		
+			return (		
+				<DragDropContext onDragEnd={this.onDragEnd}>
+				<div className="app">
+				<Droppable droppableId="droppable-list" key="{i}">
+					
+						{provided => (
+									
+						//<RootRef rootRef={provided.innerRef}>
+						<div ref={provided.innerRef} key="{provided.id}">
+						<List>
+								
+							{jsondata.map((group, index) => {
+								return(
+								<Draggable draggableId={group.id} key={group.id} index={index}>	
+								{(provided, snapshot) => (
+										<div
+											ref={provided.innerRef}
+											{...provided.draggableProps}
+											{...provided.dragHandleProps}
+											key={group.id}>
+											{ this.item2(provided,group) }
+										</div>
+										)}
+								</Draggable> 
+								);
+								} 
+								)  
+							} {provided.placeholder}
+								</List>
+								</div>
+								//</RootRef>
+							)}
+						</Droppable>
+						</div>
+					</DragDropContext>
+						);			
+					}
+		
 	}
 	
 	render() { 	
-		let jsondata = this.state.data;
 		 
 		  return (	  
 			   <TableContainer style={{ width: "100%" }}>
