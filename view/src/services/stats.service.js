@@ -6,7 +6,7 @@ class StatsDataService {
     var name = gameId + "_stat";
     var stats = localStorage.getItem(name);
     if(stats) {
-      return JSON.stringify(stats);
+      return stats;
     } else {
       var data = {};
       return null;

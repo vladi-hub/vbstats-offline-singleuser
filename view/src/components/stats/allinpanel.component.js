@@ -35,12 +35,13 @@ export default class AllinBoard extends Component {
 			this.setState({
 				data: null
 			});
-		  },1000);
+		  },500);
 		  let gameId = localStorage.getItem("gameId");
 		let stats = StatsDataService.get(gameId);
 		let rowz = new Array();
+		let keysSize = JSON.parse(stats).stats.length;
 		//stats = JSON.parse(stats);
-		for (let i = 0; i < Object.keys(stats).length; i++) {
+		for (let i = 0; i < keysSize; i++) {
 			let playerId = stats[i].id;
 			let name = stats[i].name;
 			let number = stats[i].number;
@@ -93,14 +94,9 @@ export default class AllinBoard extends Component {
 	    setTimeout(() => {
 			const jsdata = rowz;
 			this.setState({
-			  data: jsdata
+			  data: rowz
 			});
-		  },1000);
-	}
-		  
-
-	componentDidMount() {
-		this.reloadData();
+		  },500);
 	}
 	
  getStyle({ provided, style, isDragging }) {
@@ -612,6 +608,23 @@ export default class AllinBoard extends Component {
 				);
 	}
 	
+	/*saveOfflineState(){
+
+		let playersData = this.state.data;
+		localStorage.setItem("playersData",JSON.stringify(playersData));
+		let lastUpdate = new Date(localStorage.getItem("update_timestamp"));
+		var present_date = new Date();
+		const ten_minutes = 1 * 60 * 1000;
+		const compareTo = new Date(present_date - ten_minutes);
+		if(!lastUpdate || compareTo.getTime() > lastUpdate.getTime()){
+			console.log("------------------ UPDATE Server Side and TimeStamp---------------");
+			localStorage.setItem("update_timestamp",present_date.toString());
+			//currentUser.revokeRefreshTokens(userId);
+			this.updateDBWithState();
+		}
+		//localStorage.setItem("timestamp")
+	}
+
 	updateDBWithState(){
 		let jdata = JSON.parse(localStorage.getItem("playersData"));
 		let dataarr = Array.from(jdata); 
@@ -619,7 +632,7 @@ export default class AllinBoard extends Component {
 		    StatsDataService.update(dataarr[i].id,dataarr[i]);
 		}
 		
-	}
+	}*/
 	
 	onDragEnd(result) {
 		  const { destination, source, draggableId } = result;
@@ -641,16 +654,17 @@ export default class AllinBoard extends Component {
 	generateRows(){
 		let jsondata = this.state.data;
 		let i = 1; 
+		let dataarr = Array.from(jsondata);
 		if(jsondata){ 		
 			return (		
 				<DragDropContext onDragEnd={this.onDragEnd}>
-				<div className="app">
-				<Droppable droppableId="droppable-list" key="{i}">
+				
+				<Droppable droppableId="droppable-list">
 					
 						{provided => (
 									
 						//<RootRef rootRef={provided.innerRef}>
-						<div ref={provided.innerRef} key="{provided.id}">
+						<div ref={provided.innerRef}>
 						<List>
 								
 							{jsondata.map((group, index) => {
@@ -661,7 +675,7 @@ export default class AllinBoard extends Component {
 											ref={provided.innerRef}
 											{...provided.draggableProps}
 											{...provided.dragHandleProps}
-											key={group.id}>
+											>
 											{ this.item2(provided,group) }
 										</div>
 										)}
@@ -675,7 +689,7 @@ export default class AllinBoard extends Component {
 								//</RootRef>
 							)}
 						</Droppable>
-						</div>
+						
 					</DragDropContext>
 						);			
 					}
@@ -683,7 +697,11 @@ export default class AllinBoard extends Component {
 	}
 	
 	render() { 	
-		 
+		let jsondata = this.state.data;
+		
+		if(jsondata) {
+		  let dataarr = Array.from(jsondata);
+		  //this.saveOfflineState();
 		  return (	  
 			   <TableContainer style={{ width: "100%" }}>
 						<Button style={{ width: "100%" }} variant="contained" color="primary" onClick={this.handleStoreClick}>
@@ -701,6 +719,9 @@ export default class AllinBoard extends Component {
 			     
 			      </Table>
 			    </TableContainer>);
+		}else {
+			return <TableBody><TableRow style={{ width: "100%" }}><TableCell>Data is Loading ...</TableCell></TableRow></TableBody>
+		}
 	}
 	
   item2({ provided, item, style, isDragging }, group){
