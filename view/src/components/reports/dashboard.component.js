@@ -96,7 +96,7 @@ export default class Dashboard extends Component {
   constructor(props) {
    super(props);
    
-   this.handleClick = this.handleClick.bind(this);
+   //this.handleClick = this.handleClick.bind(this);
 
    //console.log("=======> teamId : " +teamId);
    this.state = {
@@ -125,112 +125,116 @@ export default class Dashboard extends Component {
       blockingAvg: 0
    };
 		   
-   GameDataService.getAllPerUser(1).then(
-	   response => {
-		   for (let i = 0; i < Object.keys(response.data).length; i++) {
-            let gameId = response.data[i].id;
-               StatsDataService.get(gameId).then(
-				   response => {
-					   setTimeout(() => {
-				          let serviceZTotal = new Array();
-				          let serviceZError = new Array();
-				          let serviceZAce = new Array();
-				          let serviceZ = new Array();
-				          let serviceAvg = 0;
-				          
-				          let passingZ = new Array();
-				          let passingZError = new Array();
-				          let passingZPerfect = new Array();
-				          let passingZKeep = new Array();
-				          let passingZPoor = new Array();
-				          let passingAvg = 0;
-				          
-				          let hittingZ = new Array();
-				          let hittingZTotal = new Array();
-				          let hittingZError = new Array();
-				          let hittingZKill = new Array();
-				          let hittingAvg = 0;
-				          
-				          let blockingZ = new Array();
-				          let blockingZTouch = new Array();
-				          let blockingZError = new Array();
-				          let blockingZSuccess = new Array();
-				          let blockingZBlock = new Array();
-				          let blockingAvg = 0;
-				          
-				          let diggingZ = new Array();
-				          let diggingZTouch = new Array();
-				          let diggingZMissed = new Array();
-				          let diggingZSuccess = new Array();
-				          let diggingAvg = 0;
+   var data = GameDataService.getAllPerUser(1);
+   if(data){
+	let rowz = new Array();
+	data = JSON.parse(data);
+	for (let i = 0; i < Object.keys(data.games).length; i++) {
+            let gameId = data.games[i].id;
+			let stats = StatsDataService.get(gameId);
+			let individualStats = JSON.parse(stats).stats;
+		    let keysSize = JSON.parse(stats).stats.length;
+
+				let serviceZTotal = new Array();
+				let serviceZError = new Array();
+				let serviceZAce = new Array();
+				let serviceZ = new Array();
+				let serviceAvg = 0;
 				
-				          let namePassing = new Map();
-				          let nameBlocking = new Map();
-				          let nameHitting = new Map();
-				          let nameDigging = new Map();
-				          let labels = new Map();
-				          
-				          for(let ii = 0; ii < Object.keys(response.data).length; ii++){
-					            let playerId = response.data[ii].id;
-					            let name = response.data[ii].name;
-					            let number = response.data[ii].number;
-					            let position = response.data[ii].position;
-					            
-					            let s_total = response.data[ii].s_total;
-				                let s_error = response.data[ii].s_error;
-				                let s_ace = response.data[ii].s_ace;
-				                
+				let passingZ = new Array();
+				let passingZError = new Array();
+				let passingZPerfect = new Array();
+				let passingZKeep = new Array();
+				let passingZPoor = new Array();
+				let passingAvg = 0;
 				
-				                let real_total = s_total - s_error - s_ace;
-				                serviceZ.push(name);
-				                serviceZTotal.push(real_total);
-				                serviceZError.push(s_error);
-				                serviceZAce.push(s_ace);
-				                serviceAvg = serviceAvg + 0.2*s_total + s_ace - 0.5*s_error;
-				                
-				                let p_poor = response.data[ii].p_poor;
-				                let p_error = response.data[ii].p_error;
-				                let p_perfect = response.data[ii].p_perfect;
-				                let p_keep = response.data[ii].p_keep;
-				                passingZ.push(name);
-				                passingZError.push(p_error);
-				                passingZPerfect.push(p_perfect);
-				                passingZKeep.push(p_keep);
-				                passingZPoor.push(p_poor);
-				                passingAvg = passingAvg + p_perfect - p_error - 0.25*p_poor;
-				                
-				                let h_total = response.data[ii].h_total;
-				                let h_error = response.data[ii].h_error;
-				                let h_kill = response.data[ii].h_kill;
-				                let hitting_total = h_total - h_error - h_kill;
-				                hittingZ.push(name);
-				                hittingZTotal.push(hitting_total);
-				                hittingZError.push(h_error);
-				                hittingZKill.push(h_kill);
-				                hittingAvg = hittingAvg + h_kill - h_error;
-				                
-				                let d_touch = response.data[ii].d_touch;
-				                let d_missed = response.data[ii].d_missed;
-				                let d_success = response.data[ii].d_success;
-				                diggingZ.push(name);
-				                diggingZTouch.push(d_touch);
-				                diggingZMissed.push(d_missed);
-				                diggingZSuccess.push(d_success);
-				                diggingAvg = diggingAvg + d_success + 0.25*d_touch - d_missed;
-				                
-				                let b_touch = response.data[ii].b_touch;
-				                let b_error = response.data[ii].b_error;
-				                let b_block = response.data[ii].b_block;
-				                let b_success = response.data[ii].b_success;
-					            blockingZ.push(name);
-					            blockingZTouch.push(b_touch);
-					            blockingZError.push(b_error);
-					            blockingZSuccess.push(b_success);
-				                blockingZBlock.push(b_block);
-				                blockingAvg = blockingAvg + b_success + b_block + 0.25*b_touch - b_error;
-					            
-					            labels.set(name);
-				   }
+				let hittingZ = new Array();
+				let hittingZTotal = new Array();
+				let hittingZError = new Array();
+				let hittingZKill = new Array();
+				let hittingAvg = 0;
+				
+				let blockingZ = new Array();
+				let blockingZTouch = new Array();
+				let blockingZError = new Array();
+				let blockingZSuccess = new Array();
+				let blockingZBlock = new Array();
+				let blockingAvg = 0;
+				
+				let diggingZ = new Array();
+				let diggingZTouch = new Array();
+				let diggingZMissed = new Array();
+				let diggingZSuccess = new Array();
+				let diggingAvg = 0;
+	
+				let namePassing = new Map();
+				let nameBlocking = new Map();
+				let nameHitting = new Map();
+				let nameDigging = new Map();
+				let labels = new Map();
+				          
+				for(let ii = 0; ii < keysSize; ii++){
+					let playerId = individualStats[ii].id;
+					let name = individualStats[ii].name;
+					let number = individualStats[ii].number;
+					let position = individualStats[ii].position;
+					
+					let s_total = individualStats[ii].s_total;
+					let s_error = individualStats[ii].s_error;
+					let s_ace = individualStats[ii].s_ace;
+					
+	
+					let real_total = s_total - s_error - s_ace;
+					serviceZ.push(name);
+					serviceZTotal.push(real_total);
+					serviceZError.push(s_error);
+					serviceZAce.push(s_ace);
+					serviceAvg = serviceAvg + 0.2*s_total + s_ace - 0.5*s_error;
+					
+					let p_poor = individualStats[ii].p_poor;
+					let p_error = individualStats[ii].p_error;
+					let p_perfect = individualStats[ii].p_perfect;
+					let p_keep = individualStats[ii].p_keep;
+					passingZ.push(name);
+					passingZError.push(p_error);
+					passingZPerfect.push(p_perfect);
+					passingZKeep.push(p_keep);
+					passingZPoor.push(p_poor);
+					passingAvg = passingAvg + p_perfect - p_error - 0.25*p_poor;
+					
+					let h_total = individualStats[ii].h_total;
+					let h_error = individualStats[ii].h_error;
+					let h_kill = individualStats[ii].h_kill;
+					let hitting_total = h_total - h_error - h_kill;
+					hittingZ.push(name);
+					hittingZTotal.push(hitting_total);
+					hittingZError.push(h_error);
+					hittingZKill.push(h_kill);
+					hittingAvg = hittingAvg + h_kill - h_error;
+					
+					let d_touch = individualStats[ii].d_touch;
+					let d_missed = individualStats[ii].d_missed;
+					let d_success = individualStats[ii].d_success;
+					diggingZ.push(name);
+					diggingZTouch.push(d_touch);
+					diggingZMissed.push(d_missed);
+					diggingZSuccess.push(d_success);
+					diggingAvg = diggingAvg + d_success + 0.25*d_touch - d_missed;
+					
+					let b_touch = individualStats[ii].b_touch;
+					let b_error = individualStats[ii].b_error;
+					let b_block = individualStats[ii].b_block;
+					let b_success = individualStats[ii].b_success;
+					blockingZ.push(name);
+					blockingZTouch.push(b_touch);
+					blockingZError.push(b_error);
+					blockingZSuccess.push(b_success);
+					blockingZBlock.push(b_block);
+					blockingAvg = blockingAvg + b_success + b_block + 0.25*b_touch - b_error;
+					
+					labels.set(name);
+				}
+				setTimeout(() => {
 				   	this.setState({
 		        	  service: serviceZ,
 		        	  serviceT: serviceZTotal,
@@ -272,22 +276,8 @@ export default class Dashboard extends Component {
 		              names: labels
 		          });
 		        },1000);
-		      },
-		      error => {
-		        this.setState({
-		          content:
-		            (error.response &&
-		              error.response.data &&
-		              error.response.data.message) ||
-		            error.message ||
-		            error.toString()
-		        });
-		      }
-		    );
-		
+			}
 		}
-		});
-  
   }
 
   shouldComponentUpdate() {

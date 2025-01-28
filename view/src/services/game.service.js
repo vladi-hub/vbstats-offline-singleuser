@@ -3,11 +3,11 @@ import * as Constants from "../components/constants";
 class GameDataService {
   
   getAllPerUser(userId) {
-    var team = localStorage.getItem("games");
-    if (!team){
+    var games = localStorage.getItem("games");
+    if (!games){
       return null;
     }
-    return team;
+    return games;
     /*var data = {
       "lastId": "3",
       "games": [
