@@ -39,35 +39,36 @@ export default class AllinBoard extends Component {
 		  let gameId = localStorage.getItem("gameId");
 		let stats = StatsDataService.get(gameId);
 		let rowz = new Array();
+		let individualStats = JSON.parse(stats).stats;
 		let keysSize = JSON.parse(stats).stats.length;
 		//stats = JSON.parse(stats);
 		for (let i = 0; i < keysSize; i++) {
-			let playerId = stats[i].id;
-			let name = stats[i].name;
-			let number = stats[i].number;
-			let position = stats[i].position;
+			let playerId = individualStats[i].id;
+			let name = individualStats[i].name;
+			let number = individualStats[i].number;
+			let position = individualStats[i].position;
 
-			let b_error = stats[i].b_error;
-            let b_touch = stats[i].b_touch;
-            let b_block = stats[i].b_block;
-            let b_success = stats[i].b_success;
+			let b_error = individualStats[i].b_error;
+            let b_touch = individualStats[i].b_touch;
+            let b_block = individualStats[i].b_block;
+            let b_success = individualStats[i].b_success;
 
-            let d_missed = stats[i].d_missed;
-            let d_touch = stats[i].d_touch;
-            let d_success = stats[i].d_success;
+            let d_missed = individualStats[i].d_missed;
+            let d_touch = individualStats[i].d_touch;
+            let d_success = individualStats[i].d_success;
 
-            let h_error = stats[i].h_error;
-            let h_kill = stats[i].h_kill;
-            let h_total = stats[i].h_total;
+            let h_error = individualStats[i].h_error;
+            let h_kill = individualStats[i].h_kill;
+            let h_total = individualStats[i].h_total;
 
-            let p_error = stats[i].p_error;
-            let p_poor = stats[i].p_poor;
-            let p_keep = stats[i].p_keep;
-            let p_perfect =stats[i].p_perfect;
+            let p_error = individualStats[i].p_error;
+            let p_poor = individualStats[i].p_poor;
+            let p_keep = individualStats[i].p_keep;
+            let p_perfect =individualStats[i].p_perfect;
 
-            let s_total = stats[i].s_total;
-            let s_ace = stats[i].s_ace;
-            let s_error =stats[i].s_error;
+            let s_total = individualStats[i].s_total;
+            let s_ace = individualStats[i].s_ace;
+            let s_error =individualStats[i].s_error;
 			rowz[i] = {'id' : playerId, 'name' : name, 'position' : position, 'number' : number,
 				"b_error": b_error,
 				"b_touch": b_touch,
