@@ -96,9 +96,10 @@ export default class Home extends Component {
   	        </AccordionSummary>
   	        <AccordionDetails>
   	          <Typography>
-  	        <LabelIcon/>Select first the game you want to add statistics for; once you reach the dashboard, you can drag and drop players to make it
-	  	      more convenient and focus on players that are on the field now.<br/>
-	        <LabelIcon/>You can use the button on top to store the data in the cloud at any time or rely on regular/timely storage (every 10 minutes).
+  	        <LabelIcon/>Select first the game you want to add statistics for; once you reach the dashboard. <br/>
+			<LabelIcon/><b>You can drag and drop players to make it
+	  	      more convenient and focus on players that are on the field now.</b><br/>
+	        <LabelIcon/>You can use the button on top to store the data at any time.
 	  	      This function also works offline; however, before going to another screen, you need to gain connectivity and store the data in the cloud or 
 	  	      it will be lost.<br/>
 	      <LabelIcon/>Collecting data is vital for analysis and improvement.<br/>
