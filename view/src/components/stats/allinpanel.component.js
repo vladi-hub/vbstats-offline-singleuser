@@ -43,7 +43,7 @@ export default class AllinBoard extends Component {
 		let keysSize = JSON.parse(stats).stats.length;
 		//stats = JSON.parse(stats);
 		for (let i = 0; i < keysSize; i++) {
-			let playerId = individualStats[i].id;
+			let playerId = individualStats[i].playerId;
 			let name = individualStats[i].name;
 			let number = individualStats[i].number;
 			let position = individualStats[i].position;
@@ -69,7 +69,7 @@ export default class AllinBoard extends Component {
             let s_total = individualStats[i].s_total;
             let s_ace = individualStats[i].s_ace;
             let s_error =individualStats[i].s_error;
-			rowz[i] = {'id' : playerId, 'name' : name, 'position' : position, 'number' : number,
+			rowz[i] = {'id' : playerId, 'gameId': gameId, 'name' : name, 'position' : position, 'number' : number,
 				"b_error": b_error,
 				"b_touch": b_touch,
 				"b_block": b_block,
@@ -122,6 +122,15 @@ export default class AllinBoard extends Component {
 	handleStoreClick(e) {
 		this.updateDBWithState();
     }      
+
+	updateDBWithState(){
+		let jdata = this.state.data;
+		let dataarr = Array.from(jdata); 
+		for (let i = 0; i < dataarr.length; i++) {
+		    StatsDataService.update(dataarr[i].id,dataarr[i].gameId,dataarr[i]);
+		}
+		
+	}
 
 	handlePassingClick(e,playerId,type, field) {
 		let playersData = this.state.data;
@@ -401,7 +410,7 @@ export default class AllinBoard extends Component {
 		          </TableCell>
 		         
 		          <TableCell>
-		          Total
+		          Attempts
 		          </TableCell>
 		          </TableRow>
 		          
@@ -457,7 +466,7 @@ export default class AllinBoard extends Component {
 		          </TableCell>
 		         
 		          <TableCell>
-		          Total
+		          Attempts
 		          </TableCell>
 		          </TableRow>
 		          

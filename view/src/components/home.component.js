@@ -44,40 +44,10 @@ export default class Home extends Component {
     		<div className={useStyles.root}>
     		<h2>What is VolleyStats?</h2>
     		<p>
-    		VolleyStats is a web & mobile app for tracking volleyball statistics (indoor and with some creativity sand) and reporting.<br/>
-	          This service should help parents and coaches to track, plan and improve their teams or players/kids' game!<br/>
-	          Data in sports is now the most important asset!	<br/>
-	          <img src="vs_success.jpg" width="280" height="200"/>
-	        </p>	  
-        	  <b>Who can use this ? </b><br/>
-        	  <LabelIcon/> Coaches<br/>
-        	  <LabelIcon/> Parents<br/>
-        	  <LabelIcon/> Players<br/>
-        	  <LabelIcon/> Anybody<br/>
-    		<Accordion>
-    	        <AccordionSummary
-    	          expandIcon={<ExpandMoreIcon />}
-    	          aria-controls="panel1a-content"
-    	          id="panel1a-header"
-    	        >
-    	          <Typography className={useStyles.heading}><PsychologyAltTwoToneIcon/> Why VolleyStats?</Typography>
-    	        </AccordionSummary>
-    	        <AccordionDetails>
-    	          <Typography>
-    	          Use the flow to set up your app and start tracking !<br/>
-    	          <img src="vsflow.png" width="550" height="200"/>  
-    	        	  <br/>
-    	          <LabelIcon/>Identify team/players gaps and address them<br/>
-    	          <LabelIcon/>Have it all in the cloud<br/>
-    	          <b>How to use it ?</b><br/>
-    	          <LabelIcon/> Sign up, figure out if the free version is enough<br/>
-    	          <LabelIcon/> Add all the players you want to track statistics (if you are a parent can be just one)<br/>
-    	          <LabelIcon/> Add all the games you want to track statistics; you can use meaning full names: XXTournamen_Game_1<br/>
-    	          <LabelIcon/> Start tracking statistics (the most important step)<br/>
-    	          <LabelIcon/> Once you have enough data check the cool reports<br/>
-    	          </Typography>
-    	        </AccordionDetails>
-    	      </Accordion>
+    		Use the flow to set up your app and start tracking !<br/>
+    	          <img src="vsflow.png" width="550" height="200"/><br/>
+			Stats are ispired by NCAA statistics guidlines!	  
+	        </p>	 
     	      
     	      <Accordion>
     	        <AccordionSummary

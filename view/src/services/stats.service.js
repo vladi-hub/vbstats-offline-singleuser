@@ -59,10 +59,10 @@ class StatsDataService {
     return nextId;
   }
 
-  update(statsId, data) {
-    var name = data.gameId + "_stat";
-    var stats = JSON.parse(localStorage.getItem(name));
-    let itemToUpdate = stats.find(item => item.id === parseInt(statsId));
+  update(playerId, gameId, data) {
+    var name = gameId + "_stat";
+    var statz = JSON.parse(localStorage.getItem(name));
+    const itemToUpdate = statz.stats.find(item => item.id === (playerId - 1));
     // Update the element
     if (itemToUpdate) {
       itemToUpdate.b_error = data['b_error'];
@@ -93,7 +93,7 @@ class StatsDataService {
       itemToUpdate.s_ace = data['s_ace'];
       itemToUpdate.s_error = data['s_error'];
 
-      localStorage.setItem(name, JSON.stringify(stats));
+      localStorage.setItem(name, JSON.stringify(statz));
     }
   }
  
