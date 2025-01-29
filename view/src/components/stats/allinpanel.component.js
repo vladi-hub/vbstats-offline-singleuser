@@ -69,7 +69,7 @@ export default class AllinBoard extends Component {
             let s_total = individualStats[i].s_total;
             let s_ace = individualStats[i].s_ace;
             let s_error =individualStats[i].s_error;
-			rowz[i] = {'id' : playerId, 'gameId': gameId, 'name' : name, 'position' : position, 'number' : number,
+			rowz[i] = {'id' : playerId, 'playerId':playerId, 'gameId': gameId, 'name' : name, 'position' : position, 'number' : number,
 				"b_error": b_error,
 				"b_touch": b_touch,
 				"b_block": b_block,

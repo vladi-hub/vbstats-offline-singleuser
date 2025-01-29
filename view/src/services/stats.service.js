@@ -62,7 +62,7 @@ class StatsDataService {
   update(playerId, gameId, data) {
     var name = gameId + "_stat";
     var statz = JSON.parse(localStorage.getItem(name));
-    const itemToUpdate = statz.stats.find(item => item.id === (playerId - 1));
+    const itemToUpdate = statz.stats.find(item => item.playerId === playerId);
     // Update the element
     if (itemToUpdate) {
       itemToUpdate.b_error = data['b_error'];
