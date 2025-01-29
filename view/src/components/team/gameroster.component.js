@@ -204,31 +204,40 @@ shouldComponentUpdate() {
 }
   
 render() {
-	  return (
-			<Paper className={useStyles.root}>
-			<h2>Manage the games you would like to add stats for </h2>
-			<hr/>
-				<form onSubmit={this.handleClick} className={useStyles.root} noValidate autoComplete="off">
-					{this.renderFormGroups()}
-					{this.state.message && (
-		              <div className="form-group">
-		                <div className="alert alert-info" role="alert">
-		                  {this.state.message}
-		                </div>
-		              </div>
-		            )}
-		        <div className="form-group">
-	            	<button className="btn btn-primary btn-block"><UpgradeIcon/> Update</button>
-	                 &nbsp;        
-	        		<button className="btn btn-primary btn-block" onClick={this.handleClickDelete}><DeleteForeverIcon/> Delete</button>
-	        		<Alert severity="info">Deleting game will delete the stats of that game too!</Alert>
-		      </div>
-		    </form>
-		    <hr/>
-	      	<h2>Add Game</h2>
-			<hr/>
-			{this.renderNewGameForm()}
-			</Paper>
-		);
+	let data2 = PlayerDataService.getAllPlayers();
+	if(data2){
+		return (
+				<Paper className={useStyles.root}>
+				<h2>Manage the games you would like to add stats for </h2>
+				<hr/>
+					<form onSubmit={this.handleClick} className={useStyles.root} noValidate autoComplete="off">
+						{this.renderFormGroups()}
+						{this.state.message && (
+						<div className="form-group">
+							<div className="alert alert-info" role="alert">
+							{this.state.message}
+							</div>
+						</div>
+						)}
+					<div className="form-group">
+						<button className="btn btn-primary btn-block"><UpgradeIcon/> Update</button>
+						&nbsp;        
+						<button className="btn btn-primary btn-block" onClick={this.handleClickDelete}><DeleteForeverIcon/> Delete</button>
+						<Alert severity="info">Deleting game will delete the stats of that game too!</Alert>
+				</div>
+				</form>
+				<hr/>
+				<h2>Add Game</h2>
+				<hr/>
+				{this.renderNewGameForm()}
+				</Paper>
+			);
+		} else {
+			return (
+				<Paper className={useStyles.root}>
+				<h2> Please add team/players first ! </h2>
+				</Paper>
+				);
+		}
 	}
 }

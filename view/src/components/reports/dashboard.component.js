@@ -498,44 +498,55 @@ export default class Dashboard extends Component {
   }
   
 render() {
-  return (
-	  <Paper className={useStyles.root}>
-		Team Radio Chart
-		<hr/>
-		<div style={{ height: 1200 }}>
-		{this.generateRadio()}
-		</div>
-		<br/>	
-		Serv Statistics
-		<hr/>
-		<div style={{ height: 600 }}>
-		{this.generateServiceRows2()}
-		</div>
-		
-		Passing Statistics
-		<hr/>
-		<div style={{ height: 600 }}>
-		{this.generatePassingRows2()}
-		</div>
-		
-		Hitting Statistics
-		<hr/>
-		<div style={{ height: 600 }}>
-		{this.generateHittingRows2()}
-		</div>
-		
-		Digging Statistics
-		<hr/>
-		<div style={{ height: 600 }}>
-		{this.generateDiggingRows2()}
-		</div>
-		
-		Blocking Statistics
-		<hr/>
-		<div style={{ height: 600 }}>
-		{this.generateBlockingRows2()}
-		</div>
-		</Paper>
-	);
+	if(this.state.hitting){
+		return (
+			<Paper className={useStyles.root}>
+				Team Radio Chart
+				<hr/>
+				<div style={{ height: 1200 }}>
+				{this.generateRadio()}
+				</div>
+				<br/>	
+				Serv Statistics
+				<hr/>
+				<div style={{ height: 600 }}>
+				{this.generateServiceRows2()}
+				</div>
+				
+				Passing Statistics
+				<hr/>
+				<div style={{ height: 600 }}>
+				{this.generatePassingRows2()}
+				</div>
+				
+				Hitting Statistics
+				<hr/>
+				<div style={{ height: 600 }}>
+				{this.generateHittingRows2()}
+				</div>
+				
+				Digging Statistics
+				<hr/>
+				<div style={{ height: 600 }}>
+				{this.generateDiggingRows2()}
+				</div>
+				
+				Blocking Statistics
+				<hr/>
+				<div style={{ height: 600 }}>
+				{this.generateBlockingRows2()}
+				</div>
+				</Paper>
+			);
+		} else {
+			return (
+				<Paper className={useStyles.root}>
+					<hr/>
+					<div style={{ height: 1200 }}>
+						Please make sure you have team, games and statistics before checking the reports !
+					</div>
+					</Paper>
+			);
+		}
 	}
 }

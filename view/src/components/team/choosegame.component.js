@@ -90,21 +90,30 @@ export default class ChooseGame extends Component {
   }
 
   render() { 
+    if(this.state.rows){
+        return (
+          <Paper className={useStyles.root}>
+          <h2>Select game for which you like to add Stats</h2>
+          <hr/>
+          {this.state.message && (
+                      <div className="form-group">
+                        <div className="alert alert-danger" role="alert">
+                          {this.state.message}
+                        </div>
+                      </div>
+                    )}
+            <div style={{ height: 800, width: 800 }}>
+              <DataGrid rows={this.state.rows} columns={columns} rowsPerPageOptions={[15,20,25]} pageSize={Constants.pageSize} onRowClick={this.handleClick}  />
+            </div>
+          </Paper>
+      );
+	} else {
     return (
-		<Paper className={useStyles.root}>
-		<h2>Select game for which you like to add Stats</h2>
-		<hr/>
-		{this.state.message && (
-	              <div className="form-group">
-	                <div className="alert alert-danger" role="alert">
-	                  {this.state.message}
-	                </div>
-	              </div>
-	            )}
-			<div style={{ height: 800, width: 800 }}>
-				<DataGrid rows={this.state.rows} columns={columns} rowsPerPageOptions={[15,20,25]} pageSize={Constants.pageSize} onRowClick={this.handleClick}  />
-			</div>
-		</Paper>
-	);
-	}
+      <Paper className={useStyles.root}>
+      <h2>Please add Players and Games before tracking statistics</h2>
+      <hr/>
+      </Paper>
+    );     
+  }
+}
 }

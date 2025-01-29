@@ -125,9 +125,49 @@ export default class TeamRoster extends Component {
 	  };
 	  let data2 = PlayerDataService.create(data);
 	  let playerId = data2.id;
-		this.setState({
-			message: "Player was addedd successfully!"
-		}); 	       
+	this.setState({
+		message: "Player was addedd successfully!"
+	}); 	    
+	var data3 = GameDataService.getAllPerUser(1);
+	if(data3){
+		data3 = JSON.parse(data3);
+		for (let i = 0; i < Object.keys(data3.games).length; i++) {
+			let playerId = data2.id;
+			let name = e.target[0].value;
+			let number = e.target[2].value;
+			let position = e.target[4].value;
+			console.log("=========player:" + name+":" + position +":" + playerId);
+			const statsDat = {
+				b_error: 0,
+				b_touch: 0,
+				b_block: 0,
+				b_success: 0,
+				playerId: playerId,
+				gameId: data3.games[i].id,
+				name: name,
+				number: number,
+				position: position,
+				d_missed: 0,
+				d_touch: 0,
+				d_success: 0,
+				
+				h_error: 0,
+				h_kill: 0,
+				h_total: 0,
+				
+				p_error: 0,
+				p_poor: 0,
+				p_keep: 0,
+				p_perfect: 0,
+				
+				s_total: 0,
+				s_ace: 0,
+				s_error: 0
+				}
+				StatsDataService.create(statsDat);
+		} 
+	}
+		 
      this.reloadData(1);
 			               
   }
