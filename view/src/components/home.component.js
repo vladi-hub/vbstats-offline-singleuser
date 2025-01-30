@@ -92,20 +92,16 @@ export default class Home extends Component {
   	          aria-controls="panel3a-content"
   	          id="panel3a-header"
   	        >
-  	          <Typography className={useStyles.heading}><AddchartTwoToneIcon/>Manage Statistics</Typography>
+  	       <Typography className={useStyles.heading}><AddchartTwoToneIcon/>Manage Statistics</Typography>
   	        </AccordionSummary>
   	        <AccordionDetails>
   	          <Typography>
-  	        <LabelIcon/>Select first the game you want to add statistics for; once you reach the dashboard. <br/>
+  	        <LabelIcon/>Select game and start tracking. <br/>
 			<LabelIcon/><b>You can drag and drop players to make it
 	  	      more convenient and focus on players that are on the field now.</b><br/>
 	        <LabelIcon/>You can use the button on top to store the data at any time.
-	  	      This function also works offline; however, before going to another screen, you need to gain connectivity and store the data in the cloud or 
-	  	      it will be lost.<br/>
-	      <LabelIcon/>Collecting data is vital for analysis and improvement.<br/>
-	 	      
+	  	      Eery 10 minutes dats is stored.<br/>
 	      	<LabelIcon/>Track stats per game for every team member - <b>serving, digging, hitting, setting, blocking</b>.<br/>
-	    	<LabelIcon/>Select tournament, team, and game and start tracking.
   	          </Typography>
   	        </AccordionDetails>
   	      </Accordion>
@@ -126,6 +122,22 @@ export default class Home extends Component {
 	          </Typography>
 	        </AccordionDetails>
 	      </Accordion>
+		  <Accordion>
+		  <AccordionSummary
+  	          expandIcon={<ExpandMoreIcon />}
+  	          aria-controls="panel3a-content"
+  	          id="panel3a-header"
+  	        >
+  	       <Typography className={useStyles.heading}><PsychologyAltTwoToneIcon/>How to export your data for backup?</Typography>
+  	        </AccordionSummary>
+  	        <AccordionDetails>
+  	          <Typography>
+  	        <LabelIcon/>iOS - . <br/>
+	        <LabelIcon/>Android.<br/>
+  	          </Typography>
+  	        </AccordionDetails>
+  	      </Accordion>
+  	      
     	    </div>
     );
   }

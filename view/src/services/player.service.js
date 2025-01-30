@@ -47,7 +47,7 @@ class PlayerDataService  {
   
   getAllPlayers() {
       var team = localStorage.getItem("players");
-      console.log(" ======== " + team);
+      //console.log(" ======== " + team);
       if(team) {
         return team;
       } else {

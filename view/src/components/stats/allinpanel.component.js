@@ -618,7 +618,7 @@ export default class AllinBoard extends Component {
 				);
 	}
 	
-	/*saveOfflineState(){
+	saveOfflineState(){
 
 		let playersData = this.state.data;
 		localStorage.setItem("playersData",JSON.stringify(playersData));
@@ -635,15 +635,6 @@ export default class AllinBoard extends Component {
 		//localStorage.setItem("timestamp")
 	}
 
-	updateDBWithState(){
-		let jdata = JSON.parse(localStorage.getItem("playersData"));
-		let dataarr = Array.from(jdata); 
-		for (let i = 0; i < dataarr.length; i++) {
-		    StatsDataService.update(dataarr[i].id,dataarr[i]);
-		}
-		
-	}*/
-	
 	onDragEnd(result) {
 		  const { destination, source, draggableId } = result;
 		  if (!destination) { return }
@@ -671,22 +662,35 @@ export default class AllinBoard extends Component {
 				
 				<Droppable droppableId="droppable-list">
 					
-						{provided => (
+				{(provided, snapshot) => (
 									
 						//<RootRef rootRef={provided.innerRef}>
 						<div ref={provided.innerRef}>
-						<List>
+						
 								
 							{jsondata.map((group, index) => {
+								let key = "item-"+group.id;
 								return(
-								<Draggable draggableId={group.id} key={group.id} index={index}>	
+								<Draggable key={key} draggableId={'item-'+key} index={index}>	
 								{(provided, snapshot) => (
 										<div
 											ref={provided.innerRef}
 											{...provided.draggableProps}
 											{...provided.dragHandleProps}
 											>
-											{ this.item2(provided,group) }
+											<TableBody>	
+											<TableRow style={{ width: "100%" }}>
+												<TableCell><strong><i> {group.name}({group.number})-{group.position}  </i></strong></TableCell>
+												<TableCell >{this.generatePassingCard(group.p_poor, group.p_error,group.p_keep, group.p_perfect,group.id)}</TableCell>
+												<TableCell >{this.generateServingCard(group.s_total, group.s_error,group.s_ace,group.id)}</TableCell>
+											</TableRow>
+											<TableRow style={{ width: "100%" }}>
+												<TableCell>{this.generateHittingCard(group.h_total,group.h_error,group.h_kill,group.id)}</TableCell>
+												<TableCell >{this.generateBlockingCard(group.b_touch,group.b_error,group.b_block,group.b_success,group.id)}</TableCell>
+												<TableCell >{this.generateDiggingCard(group.d_touch,group.d_missed, group.d_success,group.id)}</TableCell>
+											</TableRow>
+										
+											</TableBody>
 										</div>
 										)}
 								</Draggable> 
@@ -694,7 +698,7 @@ export default class AllinBoard extends Component {
 								} 
 								)  
 							} {provided.placeholder}
-								</List>
+							
 								</div>
 								//</RootRef>
 							)}
@@ -711,11 +715,12 @@ export default class AllinBoard extends Component {
 		
 		if(jsondata) {
 		  let dataarr = Array.from(jsondata);
-		  //this.saveOfflineState();
-		  return (	  
+		  this.saveOfflineState();
+		  return (	
 			   <TableContainer style={{ width: "100%" }}>
+				<h2>User drag-n-drop, to reorder list and focus on people playing. <br/></h2>
 						<Button style={{ width: "100%" }} variant="contained" color="primary" onClick={this.handleStoreClick}>
-			                Store data to the Cloud
+			                Store data 
 			              </Button>
 			      <Table style={{ width: "100%" }} aria-label="spanning table">
 			     
@@ -732,28 +737,5 @@ export default class AllinBoard extends Component {
 		}else {
 			return <TableBody><TableRow style={{ width: "100%" }}><TableCell>Data is Loading ...</TableCell></TableRow></TableBody>
 		}
-	}
-	
-  item2({ provided, item, style, isDragging }, group){
-		return (
-				
-				 <TableBody key={group.id}>	
-				  <TableRow style={{ width: "100%" }}>
-		            <TableCell><strong><i> {group.name}({group.number})-{group.position}  </i></strong></TableCell>
-		            <TableCell >{this.generatePassingCard(group.p_poor, group.p_error,group.p_keep, group.p_perfect,group.id)}</TableCell>
-		            <TableCell >{this.generateServingCard(group.s_total, group.s_error,group.s_ace,group.id)}</TableCell>
-		          </TableRow>
-		          <TableRow style={{ width: "100%" }}>
-		            <TableCell>{this.generateHittingCard(group.h_total,group.h_error,group.h_kill,group.id)}</TableCell>
-		            <TableCell >{this.generateBlockingCard(group.b_touch,group.b_error,group.b_block,group.b_success,group.id)}</TableCell>
-		            <TableCell >{this.generateDiggingCard(group.d_touch,group.d_missed, group.d_success,group.id)}</TableCell>
-		          </TableRow>
-		          <TableRow style={{ width: "100%" }}>
-		          	<TableCell >
-		          		<hr/>
-		            </TableCell>
-		          </TableRow>
-		          </TableBody>	  		
-		);
 	}
 }
