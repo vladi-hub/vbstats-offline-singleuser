@@ -175,18 +175,18 @@ export default class TeamRoster extends Component {
   renderNewPlayerForm = () => {
 	  return  (
 	        	<form onSubmit={this.handleClickNewPlayer} className={useStyles.root} noValidate autoComplete="off">
-	        	  <div className="form-group"> 
+	        	  <div> 
 
-	        	  <BadgeTwoToneIcon/><TextField required  id="outlined-basic" label="Player Name" variant="outlined"/> 
+	        	  <BadgeTwoToneIcon/><TextField required  id="outlined-basic" label="Player Name" variant="outlined" sx={{width:'40%'}}/> 
 	               
-	                <NumbersTwoToneIcon/> <TextField required id="outlined-basic" label="Player Number" variant="outlined"/>         
+				  &nbsp; <TextField required id="outlined-basic" label="Player Number" variant="outlined" sx={{width:'15%'}}/>         
 	                	
-		                <PictureInPictureTwoToneIcon/>
+		                &nbsp;
 						 <Select
 		                labelId="demo-simple-select-label"
 		                    id="demo-simple-select"
 		                    defaultValue={'S'}
-		                    label="Player Position" variant="outlined"
+		                    label="Player Position" variant="outlined" sx={{width:'15%'}}
 		                  >
 		                    <MenuItem value={'S'}>S</MenuItem>
 		                    <MenuItem value={'MH'}>MH</MenuItem>
@@ -197,7 +197,8 @@ export default class TeamRoster extends Component {
 		                  </Select>        
 
 	                	</div>
-	        	  <div className="form-group">
+						<br/>
+	        	  <div >
 	              <button className="btn btn-primary btn-block"><PersonAddAlt1Icon/> Add Player</button>
 	              </div> &nbsp;
 	  		</form>
@@ -213,17 +214,17 @@ export default class TeamRoster extends Component {
        data = Array.from(this.state.rows);
       // Here we build the form's groups elements dynamically
       return data.map(group => {
-          return  (<div className="form-group" key={group[1].id}>
+          return  (<div key={group[1].id}>
             <React.Fragment key={group[1].id}>
             <SportsHandballIcon/>
             <Checkbox id={group[1].id.toString()} inputProps={{ 'aria-label': 'description' }} />
-                <TextField defaultValue={group[1].name} inputProps={{ 'aria-label': 'description' }} id="outlined-basic" label="Player Name" variant="outlined"/>
-                <TextField defaultValue={group[1].number} inputProps={{ 'aria-label': 'description' }} id="outlined-basic" label="Player Number" variant="outlined"/>
+                <TextField defaultValue={group[1].name} inputProps={{ 'aria-label': 'description' }} id="outlined-basic" label="Player Name" variant="outlined" sx={{width:'40%'}}/>
+                <TextField defaultValue={group[1].number} inputProps={{ 'aria-label': 'description' }} id="outlined-basic" label="Player Number" variant="outlined" sx={{width:'15%'}}/>
                 <Select
 	                labelId="demo-simple-select-label"
 	                    id="demo-simple-select"
 	                    defaultValue={group[1].position}
-	                    label="Player Position" variant="outlined"
+	                    label="Player Position" variant="outlined" sx={{width:'15%'}}
 	                  >
 	                    <MenuItem value={'S'}>S</MenuItem>
 	                    <MenuItem value={'MH'}>MH</MenuItem>

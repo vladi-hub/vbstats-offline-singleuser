@@ -679,12 +679,12 @@ export default class AllinBoard extends Component {
 											{...provided.dragHandleProps}
 											>
 											<TableBody>	
-											<TableRow style={{ width: "100%" }}>
-												<TableCell><strong><i> {group.name}({group.number})-{group.position}  </i></strong></TableCell>
+											<TableRow >
+												<TableCell ><strong><center> {group.name}({group.number})-{group.position}  </center></strong></TableCell>
 												<TableCell >{this.generatePassingCard(group.p_poor, group.p_error,group.p_keep, group.p_perfect,group.id)}</TableCell>
 												<TableCell >{this.generateServingCard(group.s_total, group.s_error,group.s_ace,group.id)}</TableCell>
 											</TableRow>
-											<TableRow style={{ width: "100%" }}>
+											<TableRow >
 												<TableCell>{this.generateHittingCard(group.h_total,group.h_error,group.h_kill,group.id)}</TableCell>
 												<TableCell >{this.generateBlockingCard(group.b_touch,group.b_error,group.b_block,group.b_success,group.id)}</TableCell>
 												<TableCell >{this.generateDiggingCard(group.d_touch,group.d_missed, group.d_success,group.id)}</TableCell>
